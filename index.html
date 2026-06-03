@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Algebra Battle - Sec 2</title>
+    <style>
+        :root {
+            --primary: #667eea; --secondary: #f093fb; --accent: #43e97b;
+            --gold: #f6d365; --danger: #f5576c;
+            --bg1: #0f0c29; --bg2: #302b63; --bg3: #24243e;
+            --glass: rgba(255,255,255,0.07); --glass-border: rgba(255,255,255,0.12);
+            --text-muted: #a8edea; --radius: 16px; --radius-lg: 24px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        html { font-size:16px; }
+        body {
+            font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+            background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+            min-height:100vh; color:white; overflow-x:hidden;
+        }
+
+        /* ── SCREENS ── */
+        .screen { display:none; min-height:100vh; width:100%; }
+        .screen.active { display:flex; flex-direction:column; }
+        .screen-centred { align-items:center; justify-content:center; padding:clamp(16px,4vw,40px); }
+        .screen-scroll  { align-items:center; overflow-y:auto; padding:clamp(12px,3vw,24px) clamp(12px,3vw,24px) 30px; -webkit-overflow-scrolling:touch; }
+
+        /* ── MATH FRACTION RENDERING ── */
+        /* Inline fraction:  num/den displayed as stacked */
+        .mfrac {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 3px;
+            font-size: 0.92em;
+        }
+        .mfrac .mnum {
+            border-bottom: 1.5px solid currentColor;
+            padding: 0 4px 2px;
+            text-align: center;
+            line-height: 1.3;
+        }
+        .mfrac .mden {
+            padding: 2px 4px 0;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* Math expression container */
+        .math-expr {
+            display: inline-flex;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2px;
+            line-height: 2.2;
+            font-family: 'Segoe UI', Georgia, serif;
+        }
+
+        /* Superscript powers */
+        .mpow { font-size: 0.65em; vertical-align: super; }
+
+        /* Question display block */
+        .q-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+        .q-instruction {
+            font-size: clamp(0.78rem,2vw,0.92rem);
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .q-math {
+            font-size: clamp(1rem,3vw,1.35rem);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            text-align: center;
+            line-height: 2.5;
+        }
+
+        /* Solution steps with fractions */
+        .step-math {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-size: clamp(0.8rem,2vw,0.95rem);
+            color: #e8e8e8;
+        }
+        .step-math:last-child { border-bottom:none; }
+
+        /* ── TYPOGRAPHY ── */
+        .title-glow {
+            font-size:clamp(1.8rem,6vw,3.5rem); font-weight:900; text-align:center;
+            background:linear-gradient(90deg,#f093fb,#f5576c,#fda085,#f6d365);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+            animation:pulse 2.5s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.25)} }
+        .subtitle { color:var(--text-muted); font-size:clamp(0.8rem,2.5vw,1.1rem); text-align:center; margin-top:6px; }
+
+        /* ── BUTTONS ── */
+        .btn {
+            display:inline-flex; align-items:center; justify-content:center; gap:8px;
+            border:none; border-radius:50px; font-weight:700; cursor:pointer;
+            transition:transform 0.18s,box-shadow 0.18s; -webkit-appearance:none; touch-action:manipulation;
+        }
+        .btn:active { transform:scale(0.95) !important; }
+        .btn-primary {
+            background:linear-gradient(135deg,var(--primary),#764ba2); color:white;
+            padding:clamp(12px,3vw,18px) clamp(24px,5vw,50px);
+            font-size:clamp(0.9rem,2.5vw,1.15rem);
+            box-shadow:0 4px 18px rgba(102,126,234,0.45); width:100%; max-width:300px;
+        }
+        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(102,126,234,0.6); }
+        .btn-danger {
+            background:linear-gradient(135deg,var(--secondary),var(--danger)); color:white;
+            padding:clamp(12px,3vw,18px) clamp(24px,5vw,50px);
+            font-size:clamp(0.9rem,2.5vw,1.15rem);
+            box-shadow:0 4px 18px rgba(245,87,108,0.4); width:100%; max-width:300px;
+        }
+        .btn-success {
+            background:linear-gradient(135deg,var(--accent),#38f9d7); color:#1a1a2e;
+            padding:clamp(12px,3vw,18px) clamp(24px,5vw,50px);
+            font-size:clamp(0.9rem,2.5vw,1.15rem);
+            box-shadow:0 4px 18px rgba(67,233,123,0.4); width:100%; max-width:300px;
+        }
+
+        /* ── GLASS CARD ── */
+        .card {
+            background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+            border:1px solid var(--glass-border); border-radius:var(--radius-lg);
+            padding:clamp(18px,4vw,38px);
+        }
+
+        /* ── HOME ── */
+        .home-inner { display:flex; flex-direction:column; align-items:center; gap:clamp(10px,2.5vw,18px); width:100%; max-width:400px; margin:0 auto; }
+        .home-badge-row { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:4px; }
+        .home-badge { background:var(--glass); border:1px solid var(--glass-border); border-radius:30px; padding:5px 13px; font-size:clamp(0.68rem,1.8vw,0.82rem); color:var(--text-muted); }
+
+        /* ── SETUP ── */
+        .setup-wrap { width:100%; max-width:520px; margin:0 auto; }
+        .setup-title { font-size:clamp(1.2rem,4vw,1.7rem); font-weight:800; text-align:center; color:var(--gold); margin-bottom:clamp(14px,3vw,24px); }
+        .form-label { display:block; font-size:clamp(0.78rem,2vw,0.92rem); color:var(--text-muted); font-weight:600; margin-bottom:7px; }
+        .form-group { margin-bottom:clamp(12px,2.5vw,18px); }
+        .text-input {
+            width:100%; padding:clamp(10px,2.5vw,14px) clamp(14px,3vw,20px);
+            background:rgba(255,255,255,0.1); border:2px solid rgba(255,255,255,0.2);
+            border-radius:var(--radius); color:white; font-size:clamp(0.9rem,2.5vw,1.05rem);
+            transition:border-color 0.25s; -webkit-appearance:none;
+        }
+        .text-input:focus { outline:none; border-color:var(--secondary); }
+        .text-input::placeholder { color:rgba(255,255,255,0.35); }
+        .cat-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(7px,1.5vw,11px); }
+        .cat-toggle {
+            padding:clamp(8px,2vw,11px) clamp(6px,1.5vw,10px);
+            background:rgba(255,255,255,0.07); border:2px solid rgba(255,255,255,0.14);
+            border-radius:12px; color:rgba(255,255,255,0.7); cursor:pointer;
+            font-size:clamp(0.7rem,1.8vw,0.82rem); font-weight:600; text-align:center;
+            transition:all 0.2s; touch-action:manipulation;
+        }
+        .cat-toggle.on { background:linear-gradient(135deg,rgba(102,126,234,0.35),rgba(118,75,162,0.35)); border-color:var(--secondary); color:white; }
+        .pill-row { display:flex; flex-wrap:wrap; gap:clamp(6px,1.5vw,10px); }
+        .pill {
+            padding:clamp(7px,2vw,11px) clamp(12px,2.5vw,18px);
+            background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.14);
+            border-radius:30px; color:rgba(255,255,255,0.75); cursor:pointer;
+            font-size:clamp(0.75rem,2vw,0.9rem); font-weight:700; transition:all 0.2s;
+            touch-action:manipulation; white-space:nowrap;
+        }
+        .pill.on { background:linear-gradient(135deg,var(--secondary),var(--danger)); border-color:var(--danger); color:white; }
+        .bonus-info-box {
+            background:rgba(246,211,101,0.08); border:1px solid rgba(246,211,101,0.28);
+            border-radius:12px; padding:clamp(9px,2vw,13px) clamp(12px,2.5vw,16px);
+            margin-top:8px; font-size:clamp(0.68rem,1.7vw,0.8rem); color:var(--gold); line-height:1.75;
+        }
+        .setup-actions { display:flex; gap:10px; margin-top:clamp(10px,2vw,16px); }
+        .setup-actions .btn-primary { max-width:none; flex:1; border-radius:14px; }
+        .btn-back {
+            background:rgba(255,255,255,0.09); border:2px solid rgba(255,255,255,0.16);
+            color:white; padding:0 clamp(14px,3vw,22px); border-radius:14px;
+            font-size:clamp(0.85rem,2vw,1rem); font-weight:700; cursor:pointer;
+            white-space:nowrap; touch-action:manipulation; transition:all 0.2s;
+        }
+        .btn-back:hover { border-color:var(--secondary); }
+        .btn-back:active { transform:scale(0.95); }
+
+        /* ── PRACTICE ── */
+        .practice-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(10px,2vw,16px); width:100%; max-width:580px; }
+        @media(min-width:600px) { .practice-grid { grid-template-columns:repeat(3,1fr); } }
+        .practice-tile {
+            background:var(--glass); border:2px solid rgba(255,255,255,0.12);
+            border-radius:var(--radius-lg); padding:clamp(16px,3vw,24px) clamp(10px,2vw,16px);
+            cursor:pointer; text-align:center; font-weight:700; font-size:clamp(0.78rem,2vw,0.92rem);
+            transition:all 0.25s; touch-action:manipulation;
+        }
+        .practice-tile:hover { border-color:var(--secondary); background:rgba(240,147,251,0.12); transform:translateY(-3px); }
+        .practice-tile:active { transform:scale(0.95); }
+        .practice-tile .ico { font-size:clamp(1.6rem,4vw,2.2rem); display:block; margin-bottom:8px; }
+
+        /* ── GAME SCREEN ── */
+        #gameScreen { justify-content:flex-start; padding-top:15px; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+        .game-wrap { width:100%; max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:clamp(8px,1.8vw,13px); }
+
+        /* Scoreboard */
+        .scoreboard {
+            display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px;
+            background:var(--glass); border:1px solid var(--glass-border);
+            border-radius:var(--radius-lg); padding:clamp(10px,2.5vw,16px) clamp(12px,3vw,22px);
+        }
+        .score-panel { text-align:center; }
+        .score-name { font-size:clamp(0.68rem,1.8vw,0.88rem); color:var(--text-muted); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:clamp(70px,15vw,120px); margin:0 auto; }
+        .score-val { font-size:clamp(1.6rem,5vw,2.6rem); font-weight:900; line-height:1; }
+        .score-streak { font-size:clamp(0.62rem,1.6vw,0.75rem); color:var(--text-muted); margin-top:2px; }
+        .score-p1 { color:var(--gold); }
+        .score-p2 { color:var(--secondary); }
+        .turn-box { text-align:center; display:flex; flex-direction:column; align-items:center; gap:5px; }
+        .turn-pill { padding:clamp(4px,1.2vw,7px) clamp(10px,2.5vw,16px); border-radius:20px; font-weight:700; font-size:clamp(0.65rem,1.6vw,0.8rem); white-space:nowrap; }
+        .turn-p1 { background:rgba(246,211,101,0.18); color:var(--gold); border:1.5px solid var(--gold); }
+        .turn-p2 { background:rgba(240,147,251,0.18); color:var(--secondary); border:1.5px solid var(--secondary); }
+        .timer-text { font-size:clamp(0.7rem,1.8vw,0.85rem); color:var(--text-muted); font-weight:600; }
+
+        /* Timer */
+        .timer-track { width:100%; height:clamp(7px,1.5vw,11px); background:rgba(255,255,255,0.1); border-radius:99px; overflow:hidden; }
+        .timer-fill { height:100%; width:100%; border-radius:99px; transition:width 1s linear; background:linear-gradient(90deg,var(--accent),var(--gold),var(--danger)); }
+        .timer-labels { display:flex; justify-content:space-between; font-size:clamp(0.6rem,1.4vw,0.72rem); color:rgba(255,255,255,0.45); margin-top:3px; padding:0 2px; }
+
+        /* Bonus zones */
+        .bz-row { display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(5px,1.2vw,8px); }
+        .bz { padding:clamp(5px,1.2vw,8px) 4px; border-radius:10px; text-align:center; font-size:clamp(0.58rem,1.4vw,0.72rem); font-weight:700; border:1.5px solid; transition:all 0.4s; line-height:1.4; }
+        .bz-hot  { background:rgba(245,87,108,0.12);  border-color:rgba(245,87,108,0.5);  color:#f5576c; }
+        .bz-warm { background:rgba(253,160,133,0.12); border-color:rgba(253,160,133,0.5); color:#fda085; }
+        .bz-ok   { background:rgba(246,211,101,0.12); border-color:rgba(246,211,101,0.5); color:var(--gold); }
+        .bz-base { background:rgba(168,237,234,0.08); border-color:rgba(168,237,234,0.4); color:var(--text-muted); }
+        .bz.active { transform:scale(1.07); box-shadow:0 0 10px currentColor; opacity:1; }
+        .bz:not(.active) { opacity:0.5; }
+
+        /* Game meta */
+        .game-meta { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; }
+        .round-label { color:var(--text-muted); font-weight:600; font-size:clamp(0.72rem,1.8vw,0.88rem); }
+        .cat-chip { padding:4px 12px; border-radius:20px; font-size:clamp(0.62rem,1.5vw,0.75rem); font-weight:700; background:linear-gradient(135deg,var(--accent),#38f9d7); color:#1a1a2e; }
+        .pts-label { color:var(--gold); font-weight:700; font-size:clamp(0.72rem,1.8vw,0.88rem); white-space:nowrap; }
+
+        /* Power-ups */
+        .pu-row { display:flex; flex-wrap:wrap; gap:clamp(5px,1.2vw,8px); justify-content:center; }
+        .pu-btn {
+            display:inline-flex; align-items:center; gap:5px;
+            padding:clamp(6px,1.5vw,9px) clamp(10px,2.2vw,16px);
+            background:rgba(255,255,255,0.08); border:1.5px solid rgba(255,255,255,0.18);
+            border-radius:20px; color:white; font-size:clamp(0.68rem,1.7vw,0.82rem);
+            font-weight:700; cursor:pointer; transition:all 0.2s; touch-action:manipulation; white-space:nowrap;
+        }
+        .pu-btn:hover:not(:disabled) { border-color:var(--gold); transform:scale(1.04); }
+        .pu-btn:active:not(:disabled) { transform:scale(0.95); }
+        .pu-btn:disabled { opacity:0.3; cursor:not-allowed; }
+        .pu-badge { background:rgba(246,211,101,0.28); border-radius:50%; min-width:18px; height:18px; display:inline-flex; align-items:center; justify-content:center; font-size:0.72rem; }
+
+        /* Flip card */
+        .flip-scene { width:100%; perspective:1000px; cursor:pointer; touch-action:manipulation; user-select:none; }
+        .flip-card { width:100%; height:clamp(180px,30vw,260px); position:relative; transform-style:preserve-3d; transition:transform 0.65s cubic-bezier(0.4,0.2,0.2,1); }
+        .flip-card.flipped { transform:rotateY(180deg); }
+        .card-face { position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:var(--radius-lg); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:clamp(14px,3vw,24px); }
+        .face-front { background:linear-gradient(135deg,rgba(102,126,234,0.28),rgba(118,75,162,0.28)); border:2px solid rgba(102,126,234,0.45); }
+        .face-back  { background:linear-gradient(135deg,rgba(67,233,123,0.14),rgba(56,249,215,0.14)); border:2px solid rgba(67,233,123,0.38); transform:rotateY(180deg); overflow:hidden; }
+        .flip-icon { font-size:clamp(1.8rem,5vw,2.8rem); margin-bottom:8px; }
+        .flip-hint { font-size:clamp(0.72rem,1.8vw,0.88rem); color:var(--text-muted); }
+        .q-cat-label { font-size:clamp(0.6rem,1.5vw,0.75rem); color:var(--text-muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; font-weight:600; }
+
+        /* Answer area */
+        .answer-card { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:var(--radius-lg); padding:clamp(14px,3vw,22px); display:flex; flex-direction:column; gap:clamp(9px,2vw,13px); }
+        .answer-row { display:flex; gap:clamp(7px,1.5vw,11px); align-items:stretch; }
+        .answer-input {
+            flex:1; padding:clamp(11px,2.5vw,15px) clamp(14px,3vw,18px);
+            background:rgba(255,255,255,0.1); border:2px solid rgba(255,255,255,0.2);
+            border-radius:14px; color:white; font-size:clamp(0.9rem,2.5vw,1.1rem);
+            font-weight:600; transition:all 0.25s; -webkit-appearance:none; min-width:0;
+        }
+        .answer-input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(67,233,123,0.18); }
+        .answer-input.ans-correct { border-color:var(--accent); background:rgba(67,233,123,0.14); }
+        .answer-input.ans-wrong { border-color:var(--danger); background:rgba(245,87,108,0.14); animation:shake .38s ease; }
+        .answer-input.live-ok { border-color:var(--accent) !important; box-shadow:0 0 0 3px rgba(67,233,123,0.22) !important; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-7px)} 40%{transform:translateX(7px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+        .btn-submit { background:linear-gradient(135deg,var(--accent),#38f9d7); border:none; border-radius:14px; color:#1a1a2e; font-size:clamp(0.82rem,2.2vw,1rem); font-weight:800; padding:0 clamp(14px,3vw,22px); cursor:pointer; transition:all 0.2s; white-space:nowrap; touch-action:manipulation; flex-shrink:0; }
+        .btn-submit:hover:not(:disabled) { transform:scale(1.04); box-shadow:0 4px 18px rgba(67,233,123,0.45); }
+        .btn-submit:active { transform:scale(0.95); }
+        .btn-submit:disabled { opacity:0.45; cursor:not-allowed; }
+        .btn-skip { background:rgba(255,255,255,0.07); border:1.5px solid rgba(255,255,255,0.16); border-radius:14px; color:rgba(255,255,255,0.7); font-size:clamp(0.78rem,2vw,0.92rem); font-weight:700; padding:0 clamp(10px,2.5vw,16px); cursor:pointer; transition:all 0.2s; touch-action:manipulation; flex-shrink:0; }
+        .btn-skip:hover { border-color:var(--danger); color:var(--danger); }
+        .btn-skip:active { transform:scale(0.95); }
+        .format-hint-text { font-size:clamp(0.62rem,1.5vw,0.75rem); color:rgba(168,237,234,0.6); text-align:center; }
+
+        /* Feedback */
+        .feedback { display:none; padding:clamp(9px,2vw,13px) clamp(14px,3vw,18px); border-radius:12px; font-weight:700; font-size:clamp(0.8rem,2vw,0.95rem); text-align:center; }
+        .feedback.show { display:block; }
+        .fb-correct { background:rgba(67,233,123,0.17); color:var(--accent); border:1px solid var(--accent); }
+        .fb-wrong   { background:rgba(245,87,108,0.17); color:var(--danger); border:1px solid var(--danger); }
+        .fb-timeout { background:rgba(253,160,133,0.17); color:#fda085; border:1px solid #fda085; }
+
+        /* Correct answer display */
+        .correct-ans-display {
+            display:none;
+            background:rgba(255,255,255,0.06);
+            border-radius:10px;
+            padding:10px 14px;
+            text-align:center;
+            font-size:clamp(0.82rem,2vw,0.98rem);
+        }
+        .correct-ans-display.show { display:block; }
+        .correct-ans-label { color:var(--text-muted); font-size:0.8em; margin-bottom:6px; }
+        .correct-ans-math { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:4px; font-weight:700; font-size:1.1em; }
+
+        /* Hint */
+        .hint-toggle-btn { background:rgba(246,211,101,0.1); border:1px solid rgba(246,211,101,0.3); border-radius:10px; color:var(--gold); padding:clamp(7px,1.8vw,10px) 16px; font-size:clamp(0.75rem,1.9vw,0.88rem); font-weight:600; cursor:pointer; transition:all 0.2s; touch-action:manipulation; width:100%; text-align:center; }
+        .hint-toggle-btn:hover { background:rgba(246,211,101,0.2); }
+        .hint-box { display:none; background:rgba(246,211,101,0.07); border-radius:10px; padding:clamp(9px,2vw,13px) clamp(12px,2.5vw,16px); color:var(--gold); font-size:clamp(0.75rem,1.9vw,0.88rem); line-height:1.65; }
+        .hint-box.show { display:block; }
+
+        /* Steps */
+        .steps-box { display:none; background:rgba(255,255,255,0.04); border-radius:12px; padding:clamp(10px,2.2vw,15px); }
+        .steps-box.show { display:block; }
+        .steps-title { color:var(--accent); font-size:clamp(0.75rem,1.9vw,0.88rem); font-weight:700; margin-bottom:8px; }
+
+        /* Stats */
+        .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(5px,1.2vw,8px); }
+        .stat-box { background:rgba(255,255,255,0.05); border-radius:11px; padding:clamp(7px,1.8vw,11px) 4px; text-align:center; }
+        .stat-val { font-size:clamp(1rem,2.8vw,1.4rem); font-weight:800; }
+        .stat-lbl { font-size:clamp(0.58rem,1.4vw,0.7rem); color:var(--text-muted); margin-top:2px; }
+
+        /* ── WINNER ── */
+        .winner-wrap { width:100%; max-width:540px; text-align:center; }
+        .trophy-anim { font-size:clamp(3.5rem,10vw,5.5rem); animation:float 2s ease-in-out infinite; }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+        .winner-label { font-size:clamp(0.7rem,2vw,0.9rem); color:var(--text-muted); margin-top:8px; letter-spacing:2px; }
+        .winner-name-text { font-size:clamp(1.5rem,5.5vw,2.5rem); font-weight:900; background:linear-gradient(90deg,var(--gold),#fda085); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin:10px 0; }
+        .final-score-row { display:flex; justify-content:center; align-items:center; gap:clamp(20px,6vw,50px); margin:16px 0; }
+        .fs-item { text-align:center; }
+        .fs-name { font-size:clamp(0.72rem,1.8vw,0.88rem); color:var(--text-muted); }
+        .fs-val { font-size:clamp(1.8rem,5.5vw,2.5rem); font-weight:900; }
+        .winner-actions { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:clamp(14px,3vw,22px); }
+        .winner-actions .btn-primary, .winner-actions .btn-danger { max-width:180px; padding:12px 20px; }
+
+        /* ── POPUP ── */
+        .popup-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.78); display:none; align-items:center; justify-content:center; z-index:900; backdrop-filter:blur(4px); padding:20px; }
+        .popup-overlay.show { display:flex; }
+        .popup-box { background:linear-gradient(135deg,#302b63,var(--bg3)); border-radius:var(--radius-lg); padding:clamp(24px,5vw,40px) clamp(20px,4vw,38px); max-width:400px; width:100%; text-align:center; border:2px solid rgba(255,255,255,0.13); animation:popIn 0.38s cubic-bezier(0.34,1.56,0.64,1); }
+        @keyframes popIn { 0%{transform:scale(0.45);opacity:0} 100%{transform:scale(1);opacity:1} }
+
+        /* ── BONUS TOAST ── */
+        .bonus-toast { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0); background:linear-gradient(135deg,var(--gold),#fda085); color:#1a1a2e; font-size:clamp(1.2rem,4vw,1.8rem); font-weight:900; padding:clamp(12px,3vw,18px) clamp(22px,5vw,36px); border-radius:18px; z-index:800; transition:transform 0.28s cubic-bezier(0.34,1.56,0.64,1),opacity 0.28s; pointer-events:none; text-align:center; white-space:pre-line; line-height:1.3; }
+        .bonus-toast.show { transform:translate(-50%,-50%) scale(1); }
+
+        /* ── CONFETTI ── */
+        .confetti-piece { position:fixed; top:-12px; border-radius:3px; animation:cfFall linear forwards; pointer-events:none; z-index:9999; }
+        @keyframes cfFall { 0%{transform:translateY(0) rotate(0deg) translateX(0);opacity:1} 100%{transform:translateY(105vh) rotate(600deg) translateX(var(--dx,0px));opacity:0} }
+
+        /* Responsive */
+        @media(min-width:600px) { .practice-grid { grid-template-columns:repeat(3,1fr); } }
+        @media(min-width:768px) { .cat-grid { grid-template-columns:repeat(3,1fr); } }
+        @media(max-height:500px) and (orientation:landscape) { .flip-card { height:130px; } .flip-icon { font-size:1.5rem; } }
+
+        .divider { height:1px; background:rgba(255,255,255,0.08); }
+    </style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="homeScreen" class="screen screen-centred active">
+    <div class="home-inner">
+        <div class="title-glow">⚔️ Algebra Battle</div>
+        <div class="subtitle">Sec 2 Singapore Maths Challenge</div>
+        <div style="height:clamp(8px,2vw,20px)"></div>
+        <button class="btn btn-primary" onclick="showSetup('battle')">🎮 Two Player Battle</button>
+        <button class="btn btn-danger"  onclick="showSetup('solo')">🎯 Solo Challenge</button>
+        <button class="btn btn-success" onclick="showPractice()">📚 Practice Mode</button>
+        <div class="home-badge-row">
+            <span class="home-badge">🔢 Linear Equations</span>
+            <span class="home-badge">📐 Expressions</span>
+            <span class="home-badge">🔄 Substitution</span>
+            <span class="home-badge">🔢 Fractions</span>
+            <span class="home-badge">✖️ Fraction Ops</span>
+            <span class="home-badge">🔣 Factorisation</span>
+        </div>
+    </div>
+</div>
+
+<!-- SETUP -->
+<div id="setupScreen" class="screen screen-scroll">
+<div class="setup-wrap"><div class="card" style="margin:auto">
+    <div class="setup-title">⚙️ Game Setup</div>
+    <div class="form-group" id="p1Group">
+        <label class="form-label">🟡 Player 1 Name</label>
+        <input class="text-input" id="p1Name" type="text" placeholder="Enter name…" value="Player 1" autocomplete="off">
+    </div>
+    <div class="form-group" id="p2Group" style="display:none">
+        <label class="form-label">🟣 Player 2 Name</label>
+        <input class="text-input" id="p2Name" type="text" placeholder="Enter name…" value="Player 2" autocomplete="off">
+    </div>
+    <div class="form-group">
+        <label class="form-label">📚 Topics <span style="color:rgba(255,255,255,0.4);font-weight:400">(tap to toggle)</span></label>
+        <div class="cat-grid" id="catGrid">
+            <div class="cat-toggle on" data-cat="linear">🔢 Linear Equations</div>
+            <div class="cat-toggle on" data-cat="expression">📐 Linear Expressions</div>
+            <div class="cat-toggle on" data-cat="substitution">🔄 Substitution</div>
+            <div class="cat-toggle on" data-cat="fraction">🔢 Fractional Expr.</div>
+            <div class="cat-toggle on" data-cat="fracop">✖️ Fraction Ops</div>
+            <div class="cat-toggle on" data-cat="factorise">🔣 Factorisation</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">🔄 Rounds</label>
+        <div class="pill-row" id="roundPills">
+            <div class="pill" data-val="5">5</div>
+            <div class="pill on" data-val="10">10</div>
+            <div class="pill" data-val="15">15</div>
+            <div class="pill" data-val="20">20</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">⏱️ Time per Question</label>
+        <div class="pill-row" id="timePills">
+            <div class="pill" data-val="30">30s 🔥</div>
+            <div class="pill" data-val="60">60s ⚡</div>
+            <div class="pill on" data-val="120">2 min ⭐</div>
+            <div class="pill" data-val="180">3 min 🐢</div>
+            <div class="pill" data-val="0">∞ 😌</div>
+        </div>
+        <div class="bonus-info-box">
+            ⚡ <strong>Speed Bonus — answer quickly for multiplied points!</strong><br>
+            🔥 First 25% of time → <strong>×3 pts</strong> &nbsp;|&nbsp; ⚡ First 50% → <strong>×2 pts</strong><br>
+            ⭐ First 75% → <strong>×1.5 pts</strong> &nbsp;|&nbsp; 🐢 After 75% → <strong>×1 base pts</strong>
+        </div>
+    </div>
+    <div class="setup-actions">
+        <button class="btn btn-primary" onclick="startGame()">▶️ Start Game!</button>
+        <button class="btn-back" onclick="showHome()">← Back</button>
+    </div>
+</div></div>
+</div>
+
+<!-- PRACTICE -->
+<div id="practiceScreen" class="screen screen-centred">
+    <div style="text-align:center;margin-bottom:clamp(10px,3vw,20px)">
+        <div style="font-size:clamp(1.3rem,4.5vw,2rem);font-weight:900;color:var(--gold)">📚 Practice Mode</div>
+        <div style="color:var(--text-muted);font-size:clamp(0.75rem,2vw,0.92rem);margin-top:5px">No timer · Unlimited hints · Full step solutions</div>
+    </div>
+    <div class="practice-grid">
+        <div class="practice-tile" onclick="startPractice('linear')"><span class="ico">🔢</span>Linear Equations</div>
+        <div class="practice-tile" onclick="startPractice('expression')"><span class="ico">📐</span>Linear Expressions</div>
+        <div class="practice-tile" onclick="startPractice('substitution')"><span class="ico">🔄</span>Substitution</div>
+        <div class="practice-tile" onclick="startPractice('fraction')"><span class="ico">🔢</span>Fractional Expressions</div>
+        <div class="practice-tile" onclick="startPractice('fracop')"><span class="ico">✖️</span>Fraction Operations</div>
+        <div class="practice-tile" onclick="startPractice('factorise')"><span class="ico">🔣</span>Factorisation</div>
+    </div>
+    <button class="btn btn-danger" style="margin-top:clamp(14px,3vw,24px);max-width:200px;border-radius:14px;padding:12px 20px;font-size:0.95rem" onclick="showHome()">← Back</button>
+</div>
+
+<!-- GAME -->
+<div id="gameScreen" class="screen">
+<div class="game-wrap" style="padding:clamp(12px,3vw,20px) clamp(12px,3vw,20px) 30px">
+
+    <div class="scoreboard">
+        <div class="score-panel">
+            <div class="score-name" id="g_p1name">P1</div>
+            <div class="score-val score-p1" id="g_p1score">0</div>
+            <div class="score-streak" id="g_p1streak">🔥 0</div>
+        </div>
+        <div class="turn-box">
+            <div class="turn-pill turn-p1" id="g_turn">—</div>
+            <div class="timer-text" id="g_timerTxt">⏱ —</div>
+        </div>
+        <div class="score-panel">
+            <div class="score-name" id="g_p2name">P2</div>
+            <div class="score-val score-p2" id="g_p2score">0</div>
+            <div class="score-streak" id="g_p2streak">🔥 0</div>
+        </div>
+    </div>
+
+    <div>
+        <div class="timer-track"><div class="timer-fill" id="g_timerBar"></div></div>
+        <div class="timer-labels"><span>🔥×3</span><span>⚡×2</span><span>⭐×1.5</span><span>🐢×1</span></div>
+    </div>
+
+    <div class="bz-row">
+        <div class="bz bz-hot  active" id="bz0">🔥 BLAZING<br>×3 pts</div>
+        <div class="bz bz-warm"        id="bz1">⚡ FAST<br>×2 pts</div>
+        <div class="bz bz-ok"          id="bz2">⭐ GOOD<br>×1.5 pts</div>
+        <div class="bz bz-base"        id="bz3">🐢 BASE<br>×1 pt</div>
+    </div>
+
+    <div class="game-meta">
+        <div class="round-label" id="g_roundLbl">Round 1/10</div>
+        <div class="cat-chip"    id="g_catChip">Topic</div>
+        <div class="pts-label"   id="g_ptsLbl">+10 pts</div>
+    </div>
+
+    <div class="pu-row">
+        <button class="pu-btn" id="puHint"   onclick="useHintPU()">💡 Hint <span class="pu-badge" id="puHintN">2</span></button>
+        <button class="pu-btn" id="puSkip"   onclick="useSkipPU()">⏭ Skip <span class="pu-badge" id="puSkipN">2</span></button>
+        <button class="pu-btn" id="puTime"   onclick="useTimePU()">⏰ +30s <span class="pu-badge" id="puTimeN">2</span></button>
+        <button class="pu-btn" id="puFreeze" onclick="useFreezePU()">❄️ Freeze <span class="pu-badge" id="puFreezeN">1</span></button>
+    </div>
+
+    <!-- Flip card -->
+    <div class="flip-scene" onclick="flipCard()" id="flipScene">
+        <div class="flip-card" id="flipCard">
+            <div class="card-face face-front">
+                <div class="flip-icon">🎴</div>
+                <div style="font-size:clamp(0.9rem,2.5vw,1.1rem);font-weight:700;margin-bottom:5px">Tap to reveal question</div>
+                <div class="flip-hint">Flip the card to see your question</div>
+            </div>
+            <div class="card-face face-back">
+                <div class="q-cat-label" id="g_qCat"></div>
+                <!-- Rendered math question -->
+                <div class="q-display" id="g_qDisplay"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Answer card -->
+    <div class="answer-card">
+        <div class="answer-row">
+            <input class="answer-input" id="g_ansInput" type="text"
+                placeholder="Type your answer…"
+                autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                onkeydown="handleKey(event)" oninput="liveCheck()">
+            <button class="btn-submit" id="g_submitBtn" onclick="submitAnswer()">✓ Check</button>
+            <button class="btn-skip" onclick="skipQuestion()">Skip</button>
+        </div>
+
+        <div class="format-hint-text" id="g_fmtHint"></div>
+        <div class="feedback" id="g_feedback"></div>
+
+        <!-- Correct answer rendered nicely -->
+        <div class="correct-ans-display" id="g_correctAns">
+            <div class="correct-ans-label">✅ Correct Answer:</div>
+            <div class="correct-ans-math" id="g_correctAnsMath"></div>
+        </div>
+
+        <div class="steps-box" id="g_steps">
+            <div class="steps-title">📖 Step-by-step Solution</div>
+            <div id="g_stepsBody"></div>
+        </div>
+
+        <button class="hint-toggle-btn" onclick="useHintPU()">💡 Show Hint</button>
+        <div class="hint-box" id="g_hintBox"></div>
+
+        <div class="divider"></div>
+
+        <div class="stats-row">
+            <div class="stat-box"><div class="stat-val" id="st_correct">0</div><div class="stat-lbl">✅ Correct</div></div>
+            <div class="stat-box"><div class="stat-val" id="st_wrong">0</div><div class="stat-lbl">❌ Wrong</div></div>
+            <div class="stat-box"><div class="stat-val" id="st_streak">0</div><div class="stat-lbl">🔥 Streak</div></div>
+            <div class="stat-box"><div class="stat-val" id="st_acc">—</div><div class="stat-lbl">🎯 Accuracy</div></div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<!-- WINNER -->
+<div id="winnerScreen" class="screen screen-centred">
+<div class="card winner-wrap">
+    <div class="trophy-anim" id="w_trophy">🏆</div>
+    <div class="winner-label">WINNER</div>
+    <div class="winner-name-text" id="w_name">—</div>
+    <div class="final-score-row">
+        <div class="fs-item"><div class="fs-name" id="w_p1name">P1</div><div class="fs-val score-p1" id="w_p1score">0</div><div style="font-size:0.75rem;color:var(--text-muted)">pts</div></div>
+        <div style="font-size:clamp(1rem,3vw,1.6rem);color:rgba(255,255,255,0.25)">VS</div>
+        <div class="fs-item"><div class="fs-name" id="w_p2name">P2</div><div class="fs-val score-p2" id="w_p2score">0</div><div style="font-size:0.75rem;color:var(--text-muted)">pts</div></div>
+    </div>
+    <div class="final-stats-text" id="w_stats" style="color:var(--text-muted);font-size:clamp(0.72rem,1.8vw,0.88rem);line-height:2"></div>
+    <div class="winner-actions">
+        <button class="btn btn-primary" onclick="replayGame()">🔄 Play Again</button>
+        <button class="btn btn-danger"  onclick="showHome()">🏠 Home</button>
+    </div>
+</div>
+</div>
+
+<div class="popup-overlay" id="popupOverlay">
+<div class="popup-box">
+    <div style="font-size:3.5em;margin-bottom:10px" id="popup_icon">🎉</div>
+    <div style="font-size:1.6em;font-weight:900;margin-bottom:8px" id="popup_title">Great!</div>
+    <div style="color:var(--text-muted);font-size:0.95em;line-height:1.7;margin-bottom:20px" id="popup_msg">Well done!</div>
+    <button class="btn btn-primary" style="max-width:200px;border-radius:14px;padding:12px 20px;font-size:0.95rem" onclick="closePopup()">Continue ▶</button>
+</div>
+</div>
+
+<div class="bonus-toast" id="bonusToast"></div>
+
+<script>
+'use strict';
+
+/* ═══════════════════════════════════════════════════════
+   MATH RENDERER  — converts text notation to HTML fractions
+   ═══════════════════════════════════════════════════════
+   Supports:
+     a/b          → stacked fraction
+     (expr)/(expr) → stacked fraction with expressions
+     x^2          → x²
+     x²           → kept as-is (unicode)
+     plain text    → plain text
+*/
+
+/**
+ * Parse a string like "(2x+4)/(x+2)" or "1/x" or "3x-8"
+ * and return an HTML string with proper stacked fractions.
+ */
+function renderMath(text) {
+    if (!text) return '';
+
+    // Step 1: protect superscripts — convert x^2 → x<sup>2</sup>
+    // and existing unicode like x² → x<sup>2</sup>
+    let s = text
+        .replace(/\^(\d+)/g, '<sup>$1</sup>')
+        .replace(/²/g, '<sup>2</sup>')
+        .replace(/³/g, '<sup>3</sup>');
+
+    // Step 2: find all fraction patterns and convert to stacked HTML
+    // Pattern: (complex_expr)/(complex_expr)  OR  simple/simple
+    // We process from left to right, greedy matching brackets
+
+    let result = '';
+    let i = 0;
+    while (i < s.length) {
+        // Try to match a fraction starting at position i
+        const fracResult = tryParseFraction(s, i);
+        if (fracResult) {
+            result += buildFracHTML(fracResult.num, fracResult.den);
+            i = fracResult.end;
+        } else {
+            result += s[i];
+            i++;
+        }
+    }
+    return result;
+}
+
+/**
+ * Try to parse a fraction (num/den) starting at position i.
+ * Returns { num, den, end } or null.
+ */
+function tryParseFraction(s, i) {
+    // Case 1: (expr)/(expr)
+    if (s[i] === '(') {
+        const closeFirst = findClose(s, i);
+        if (closeFirst !== -1 && s[closeFirst+1] === '/') {
+            const afterSlash = closeFirst + 2;
+            if (s[afterSlash] === '(') {
+                const closeSecond = findClose(s, afterSlash);
+                if (closeSecond !== -1) {
+                    return {
+                        num: s.slice(i+1, closeFirst),
+                        den: s.slice(afterSlash+1, closeSecond),
+                        end: closeSecond + 1
+                    };
+                }
+            } else {
+                // (expr)/simple — grab simple token
+                const tok = grabToken(s, afterSlash);
+                if (tok.length > 0) {
+                    return {
+                        num: s.slice(i+1, closeFirst),
+                        den: tok,
+                        end: afterSlash + tok.length
+                    };
+                }
+            }
+        }
+    }
+
+    // Case 2: simple/simple  e.g.  3x/4  or  17/12
+    // Only match if: left side is letters/digits/+/- run, right side same
+    const leftTok = grabToken(s, i);
+    if (leftTok.length > 0) {
+        const afterLeft = i + leftTok.length;
+        if (s[afterLeft] === '/') {
+            const afterSlash = afterLeft + 1;
+            if (s[afterSlash] === '(') {
+                const closeP = findClose(s, afterSlash);
+                if (closeP !== -1) {
+                    return {
+                        num: leftTok,
+                        den: s.slice(afterSlash+1, closeP),
+                        end: closeP + 1
+                    };
+                }
+            } else {
+                const rightTok = grabToken(s, afterSlash);
+                if (rightTok.length > 0) {
+                    return {
+                        num: leftTok,
+                        den: rightTok,
+                        end: afterSlash + rightTok.length
+                    };
+                }
+            }
+        }
+    }
+    return null;
+}
+
+/** Find matching closing paren for '(' at position i */
+function findClose(s, i) {
+    let depth = 0;
+    for (let j = i; j < s.length; j++) {
+        if (s[j] === '(') depth++;
+        else if (s[j] === ')') { depth--; if (depth === 0) return j; }
+    }
+    return -1;
+}
+
+/** Grab a "token" — sequence of letters, digits, ^, <sup>...</sup>, +, - (not slash or paren) */
+function grabToken(s, i) {
+    let buf = '';
+    let j = i;
+    // Allow leading minus
+    while (j < s.length) {
+        // Absorb <sup>...</sup> tags
+        if (s.slice(j, j+5) === '<sup>') {
+            const close = s.indexOf('</sup>', j);
+            if (close !== -1) { buf += s.slice(j, close+6); j = close+6; continue; }
+        }
+        const ch = s[j];
+        if (ch === '/' || ch === '(' || ch === ')') break;
+        buf += ch; j++;
+    }
+    return buf.replace(/[+\-]$/, ''); // trim trailing +/-  (they belong to next term)
+}
+
+/** Build the stacked fraction HTML */
+function buildFracHTML(num, den) {
+    // Recursively render num and den (they might contain nested fractions — unlikely but safe)
+    const nHTML = num;  // already has <sup> substitutions
+    const dHTML = den;
+    return `<span class="mfrac"><span class="mnum">${nHTML}</span><span class="mden">${dHTML}</span></span>`;
+}
+
+/**
+ * Full question renderer — splits on newline:
+ * line 0 = instruction ("Solve for x:", "Simplify:", etc.)
+ * line 1+ = the math expression
+ */
+function renderQuestion(qText) {
+    const lines = qText.split('\n');
+    const instruction = lines[0] || '';
+    const expr = lines.slice(1).join(' ');
+
+    let html = '';
+    if (instruction) {
+        html += `<div class="q-instruction">${escapeHTML(instruction)}</div>`;
+    }
+    if (expr) {
+        html += `<div class="q-math">${renderMath(escapeHTML(expr).replace(/&amp;/g,'&'))}</div>`;
+    }
+    return html;
+}
+
+/**
+ * Render a step string (may contain fractions)
+ */
+function renderStep(stepText) {
+    return `<div class="step-math">${renderMath(escapeHTML(stepText).replace(/&amp;/g,'&'))}</div>`;
+}
+
+function escapeHTML(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ═══════════════════════════════════════════════════════
+   ANSWER CHECKER  (smart, order-independent)
+═══════════════════════════════════════════════════════ */
+function norm(raw) {
+    return String(raw ?? '')
+        .toLowerCase().replace(/\s+/g,'')
+        .replace(/[−–]/g,'-').replace(/×/g,'*').replace(/÷/g,'/').replace(/\*\*/g,'^')
+        .replace(/--/g,'+').replace(/\+-/g,'-').replace(/-\+/g,'-');
+}
+function sortFactors(s) {
+    if (!s.includes('(')) return s;
+    const leadM = s.match(/^(-?\d*\/?\d*(?:\.\d+)?)\(/);
+    let lead='',rest=s;
+    if (leadM&&leadM[1]){lead=leadM[1];rest=s.slice(lead.length);}
+    const factors=[]; let depth=0,buf='';
+    for(const ch of rest){
+        if(ch==='(')depth++; if(ch===')')depth--;
+        buf+=ch; if(depth===0&&buf){factors.push(buf);buf='';}
+    }
+    factors.sort(); return lead+factors.join('');
+}
+function termVariants(s){
+    const parts=[]; let buf='';
+    for(let i=0;i<s.length;i++){
+        const ch=s[i];
+        if((ch==='+'||ch==='-')&&i>0&&s[i-1]!=='^'){if(buf)parts.push(buf);buf=ch;}
+        else buf+=ch;
+    }
+    if(buf)parts.push(buf);
+    if(parts.length<=1)return[s];
+    return perms(parts).map(p=>{let r=p[0];for(let i=1;i<p.length;i++)r+=(p[i][0]==='-'?'':'+')+ p[i];return r.replace(/^\+/,'');});
+}
+function perms(a){
+    if(a.length<=1)return[a];
+    const out=[];
+    a.forEach((el,i)=>perms([...a.slice(0,i),...a.slice(i+1)]).forEach(p=>out.push([el,...p])));
+    return out;
+}
+function fracEqual(a,b){
+    const fr=/^(-?\d+)\/(\d+)$/;
+    const ma=a.match(fr),mb=b.match(fr);
+    if(ma&&mb)return+ma[1]*+mb[2]===+mb[1]*+ma[2];
+    const toN=s=>{const m=s.match(fr);return m?+m[1]/+m[2]:parseFloat(s);};
+    const na=toN(a),nb=toN(b);
+    return!isNaN(na)&&!isNaN(nb)&&Math.abs(na-nb)<1e-6;
+}
+function numEqual(a,b){const na=parseFloat(a),nb=parseFloat(b);return!isNaN(na)&&!isNaN(nb)&&Math.abs(na-nb)<1e-6;}
+function checkAnswer(userRaw,acceptedRaw){
+    const u=norm(userRaw);
+    for(const raw of String(acceptedRaw).split('|')){
+        const a=norm(raw.trim());
+        if(u===a)return true;
+        if(sortFactors(u)===sortFactors(a))return true;
+        if(fracEqual(u,a))return true;
+        if(numEqual(u,a))return true;
+        for(const uv of termVariants(u)){if(uv===a||sortFactors(uv)===sortFactors(a))return true;}
+        for(const av of termVariants(a)){if(av===u||sortFactors(av)===sortFactors(u))return true;}
+    }
+    return false;
+}
+
+/* ═══════════════════════════════════════════════════════
+   QUESTION BANK
+   Each question has:
+     q  : text (line 0 = instruction, line 1 = expression)
+     a  : accepted answer(s) separated by |
+     hint, steps, pts
+     display_a (optional): what to SHOW as the answer (can include / notation)
+═══════════════════════════════════════════════════════ */
+const QB = {
+    linear:[
+        {q:"Solve for x:\n3x + 7 = 22",               a:"5",        hint:"Subtract 7 from both sides, then ÷3.",      steps:["3x = 22 − 7 = 15","x = 15 ÷ 3 = 5"],                                pts:10},
+        {q:"Solve for x:\n2x − 5 = 11",               a:"8",        hint:"Add 5 to both sides, then ÷2.",             steps:["2x = 16","x = 8"],                                                   pts:10},
+        {q:"Solve for x:\n4x + 3 = 2x + 11",          a:"4",        hint:"Move x terms left, numbers right.",         steps:["2x = 8","x = 4"],                                                    pts:12},
+        {q:"Solve for x:\n5(x − 2) = 15",             a:"5",        hint:"Expand: 5x − 10 = 15.",                     steps:["5x − 10 = 15","5x = 25","x = 5"],                                   pts:14},
+        {q:"Solve for x:\n7x − 4 = 3x + 12",          a:"4",        hint:"Collect x terms on one side.",              steps:["4x = 16","x = 4"],                                                   pts:12},
+        {q:"Solve for x:\n(x + 3)/2 = 5",             a:"7",        hint:"Multiply both sides by 2 first.",           steps:["x + 3 = 10","x = 7"],                                               pts:14},
+        {q:"Solve for x:\n−3x + 9 = 0",               a:"3",        hint:"Move 9 across, divide by −3.",              steps:["−3x = −9","x = 3"],                                                  pts:10},
+        {q:"Solve for x:\n5 − 2x = 1",                a:"2",        hint:"Subtract 5 from both sides.",               steps:["−2x = −4","x = 2"],                                                  pts:10},
+        {q:"Solve for x:\n4(x + 2) = 3(x + 5)",      a:"7",        hint:"Expand both brackets first.",               steps:["4x + 8 = 3x + 15","x = 7"],                                         pts:14},
+        {q:"Solve for x:\n2x/3 = 8",                  a:"12",       hint:"Multiply both sides by 3.",                 steps:["2x = 24","x = 12"],                                                  pts:14},
+        {q:"Solve for x:\nx/4 − 1 = x/2 − 3",        a:"8",        hint:"Multiply everything by 4 to clear fractions.",steps:["x − 4 = 2x − 12","−x = −8","x = 8"],                             pts:18},
+        {q:"Solve for x:\n(2x−1)/3 = (x+2)/2",       a:"8",        hint:"Cross-multiply or use LCD = 6.",            steps:["2(2x−1) = 3(x+2)","4x − 2 = 3x + 6","x = 8"],                      pts:18},
+        {q:"Solve for x:\n3(2x+1) = 2(x+8)",         a:"13/4",     hint:"Expand both sides then collect like terms.",steps:["6x + 3 = 2x + 16","4x = 13","x = 13/4"],                            pts:18},
+    ],
+    expression:[
+        {q:"Simplify:\n3x + 5x − 2x",                          a:"6x",                            hint:"Add/subtract the coefficients.",                     steps:["(3+5−2)x = 6x"],                                       pts:8},
+        {q:"Simplify:\n4a − 3b + 2a + 5b",                     a:"6a+2b|2b+6a",                   hint:"Group 'a' and 'b' terms separately.",                steps:["6a + 2b"],                                             pts:10},
+        {q:"Expand and simplify:\n3(x + 4) + 2(x − 1)",        a:"5x+10",                         hint:"Expand each bracket then collect.",                  steps:["3x + 12 + 2x − 2","= 5x + 10"],                       pts:12},
+        {q:"Expand and simplify:\n2(3x − 1) − 3(x + 2)",       a:"3x-8",                          hint:"Watch the negative sign outside second bracket.",    steps:["6x − 2 − 3x − 6","= 3x − 8"],                         pts:14},
+        {q:"Simplify:\n5xy + 3x − 2xy + x",                    a:"3xy+4x|4x+3xy",                 hint:"Group xy terms, then x terms.",                     steps:["3xy + 4x"],                                            pts:12},
+        {q:"Expand:\n(x + 3)(x + 5)",                          a:"x^2+8x+15",                     hint:"FOIL: First, Outer, Inner, Last.",                   steps:["x^2 + 5x + 3x + 15","= x^2 + 8x + 15"],               pts:14},
+        {q:"Expand:\n(x − 2)(x + 7)",                          a:"x^2+5x-14",                     hint:"FOIL — watch the signs.",                           steps:["x^2 + 7x − 2x − 14","= x^2 + 5x − 14"],               pts:14},
+        {q:"Expand:\n(2x + 3)(x − 4)",                         a:"2x^2-5x-12",                    hint:"FOIL: 2x·x, 2x·(−4), 3·x, 3·(−4).",               steps:["2x^2 − 8x + 3x − 12","= 2x^2 − 5x − 12"],             pts:16},
+        {q:"Expand:\n(x + 1)^2",                               a:"x^2+2x+1",                      hint:"(a+b)² = a²+2ab+b².",                               steps:["= x^2 + 2x + 1"],                                      pts:14},
+        {q:"Expand and simplify:\n4(x + 3) − (2x − 5)",        a:"2x+17",                         hint:"−(2x−5) = −2x+5.",                                  steps:["4x + 12 − 2x + 5","= 2x + 17"],                       pts:14},
+        {q:"Expand:\n(x − 4)^2",                               a:"x^2-8x+16",                     hint:"(a−b)² = a²−2ab+b².",                               steps:["= x^2 − 8x + 16"],                                     pts:14},
+        {q:"Expand:\n(3x − 1)(2x + 5)",                        a:"6x^2+13x-5",                    hint:"FOIL each pair carefully.",                          steps:["6x^2 + 15x − 2x − 5","= 6x^2 + 13x − 5"],            pts:18},
+    ],
+    substitution:[
+        {q:"If x = 3, find:\n4x − 2",                  a:"10",      hint:"Replace x with 3.",                         steps:["= 4(3) − 2 = 10"],                                                   pts:8},
+        {q:"If x = −2, find:\nx^2 + 3x + 1",           a:"-1",      hint:"(−2)² = 4.",                               steps:["= (−2)^2 + 3(−2) + 1","= 4 − 6 + 1 = −1"],                         pts:12},
+        {q:"If a = 2, b = 3, find:\n3a + 2b",           a:"12",      hint:"Substitute both values.",                  steps:["= 3(2) + 2(3) = 6 + 6 = 12"],                                       pts:10},
+        {q:"If x = 1/2, find:\n6x − 1",                 a:"2",       hint:"6 × ½ = 3.",                               steps:["= 6(1/2) − 1 = 3 − 1 = 2"],                                        pts:12},
+        {q:"If p = 4, find:\np^2 − 2p + 1",             a:"9",       hint:"4² = 16.",                                 steps:["= 16 − 8 + 1 = 9"],                                                 pts:12},
+        {q:"If x = 2, y = −1, find:\n3x^2 − 2y",        a:"14",      hint:"x² = 4; −2(−1) = +2.",                    steps:["= 3(4) − 2(−1) = 12 + 2 = 14"],                                    pts:14},
+        {q:"If t = 3, find:\n2t(t − 1)",                 a:"12",      hint:"2(3)(2) = 12.",                            steps:["= 2(3)(3−1) = 6 × 2 = 12"],                                        pts:12},
+        {q:"If x = −3, find:\n2x^2 + x − 5",            a:"10",      hint:"(−3)² = 9.",                               steps:["= 2(9) + (−3) − 5 = 18 − 3 − 5 = 10"],                            pts:14},
+        {q:"If m = 5, find:\n(m+1)(m−2)",               a:"18",      hint:"(6)(3) = 18.",                             steps:["= (5+1)(5−2) = 6 × 3 = 18"],                                       pts:12},
+        {q:"If a = −1, b = 2, find:\na^3 − b^2",        a:"-5",      hint:"(−1)³ = −1; 2² = 4.",                     steps:["= (−1)^3 − (2)^2 = −1 − 4 = −5"],                                 pts:14},
+        {q:"If x = 3, y = −2, find:\nx^2 + xy − y^2",   a:"-1",      hint:"xy = 3×(−2) = −6; y² = 4.",              steps:["= 9 + (−6) − 4 = −1"],                                             pts:16},
+        {q:"If x = −1/2, find:\n4x^2 − 3x + 2",         a:"4.5|9/2", hint:"(−½)² = ¼; −3(−½) = 3/2.",              steps:["= 4(1/4) + 3/2 + 2 = 1 + 1.5 + 2 = 4.5"],                        pts:16},
+    ],
+    fraction:[
+        {q:"Simplify:\n(2x + 4)/2",               a:"x+2",                                              hint:"Factorise numerator: 2(x+2), then cancel 2.",   steps:["= 2(x+2)/2","= x + 2"],                                pts:10},
+        {q:"Simplify:\n(3x − 6)/3",               a:"x-2",                                              hint:"3(x−2) ÷ 3.",                                    steps:["= 3(x−2)/3","= x − 2"],                                pts:10},
+        {q:"Simplify:\n6x^2/(2x)",                a:"3x",                                               hint:"Divide coefficients and subtract indices.",       steps:["= 3x"],                                                pts:12},
+        {q:"Simplify:\n(4x + 8)/(x + 2)",         a:"4",                                                hint:"Factorise numerator: 4(x+2).",                   steps:["= 4(x+2)/(x+2)","= 4"],                               pts:14},
+        {q:"Single fraction:\n1/(x+1) + 2/(x+1)", a:"3/(x+1)",                                          hint:"Same denominator — add numerators.",              steps:["= (1+2)/(x+1)","= 3/(x+1)"],                          pts:12},
+        {q:"Single fraction:\n1/x + 1/2",          a:"(x+2)/(2x)|(2+x)/(2x)",                           hint:"LCD = 2x.",                                      steps:["= 2/(2x) + x/(2x)","= (x+2)/(2x)"],                   pts:16},
+        {q:"Simplify:\n(10x^2 y)/(5xy)",           a:"2x",                                               hint:"Cancel common factors.",                         steps:["= (10/5)(x^2/x)(y/y)","= 2x"],                        pts:14},
+        {q:"Simplify:\n(x^2 − 4)/(x + 2)",        a:"x-2",                                              hint:"x²−4 = (x+2)(x−2).",                            steps:["= (x+2)(x−2)/(x+2)","= x − 2"],                       pts:18},
+        {q:"Single fraction:\n2/(x−1) − 1/(x−1)", a:"1/(x-1)",                                          hint:"Same denominator — subtract numerators.",         steps:["= (2−1)/(x−1)","= 1/(x−1)"],                          pts:10},
+        {q:"Simplify:\n(2x + 6)/(x + 3)",         a:"2",                                                hint:"Factorise numerator: 2(x+3).",                   steps:["= 2(x+3)/(x+3)","= 2"],                               pts:14},
+        {q:"Simplify:\n(x^2 − 9)/(x − 3)",        a:"x+3",                                              hint:"x²−9 = (x+3)(x−3).",                            steps:["= (x+3)(x−3)/(x−3)","= x + 3"],                       pts:16},
+        {q:"Single fraction:\n3/(x+2) + 2/(x−1)", a:"(5x+1)/((x+2)(x-1))|(5x+1)/((x-1)(x+2))",        hint:"LCD = (x+2)(x−1). Cross-multiply numerators.",   steps:["= [3(x−1) + 2(x+2)] / [(x+2)(x−1)]","= (5x+1)/((x+2)(x−1))"],  pts:20},
+    ],
+    fracop:[
+        {q:"Simplify:\n(x/3) × (6/x)",                   a:"2",          hint:"Multiply across then cancel.",                    steps:["= 6x/(3x) = 2"],                                   pts:14},
+        {q:"Simplify:\n(2x/5) × (15/(4x))",              a:"3/2",        hint:"Multiply: 2x×15=30x, 5×4x=20x.",                 steps:["= 30x/20x = 3/2"],                                pts:16},
+        {q:"Simplify:\n(3x/4) ÷ (x/2)",                  a:"3/2",        hint:"Dividing = multiplying by reciprocal.",           steps:["= 3x/4 × 2/x = 6x/4x = 3/2"],                    pts:16},
+        {q:"Simplify:\n(x^2/6) ÷ (x/3)",                 a:"x/2",        hint:"Flip second fraction and multiply.",              steps:["= x^2/6 × 3/x = 3x^2/(6x) = x/2"],               pts:18},
+        {q:"Simplify:\n2/(x+1) × (x+1)/4",               a:"1/2",        hint:"(x+1) cancels.",                                 steps:["= 2(x+1)/(4(x+1))","= 2/4 = 1/2"],               pts:16},
+        {q:"Simplify:\n4x/(x−2) × (x−2)/8",              a:"x/2",        hint:"(x−2) cancels.",                                 steps:["= 4x(x−2)/(8(x−2))","= 4x/8 = x/2"],             pts:16},
+        {q:"Simplify:\n6x^2/(x+3) ÷ 3x/(x+3)",          a:"2x",         hint:"Flip and multiply; (x+3) cancels.",              steps:["= 6x^2/(x+3) × (x+3)/(3x)","= 6x^2/3x = 2x"],   pts:18},
+        {q:"Simplify:\n(x+2)/x × x/(x+2)",               a:"1",          hint:"Everything cancels!",                            steps:["= x(x+2) / (x(x+2)) = 1"],                        pts:14},
+        {q:"Single fraction:\n2/3 + 3/4",                 a:"17/12",      hint:"LCD = 12.",                                      steps:["= 8/12 + 9/12 = 17/12"],                          pts:12},
+        {q:"Single fraction:\n5/6 − 1/4",                 a:"7/12",       hint:"LCD = 12.",                                      steps:["= 10/12 − 3/12 = 7/12"],                          pts:12},
+        {q:"Simplify:\n(x^2−1)/(x+1) × 2/(x−1)",        a:"2",          hint:"x²−1 = (x+1)(x−1).",                            steps:["= (x+1)(x−1)/(x+1) × 2/(x−1)","= 2"],            pts:20},
+        {q:"Simplify:\n3/(x+2) ÷ 6/(x+2)^2",            a:"(x+2)/2",    hint:"Flip second; (x+2) cancels once.",              steps:["= 3/(x+2) × (x+2)^2/6","= 3(x+2)/6 = (x+2)/2"], pts:20},
+    ],
+    factorise:[
+        {q:"Factorise:\n3x + 6",                  a:"3(x+2)",                            hint:"HCF = 3.",                                       steps:["= 3(x + 2)"],                                              pts:10},
+        {q:"Factorise:\n4x^2 − 8x",               a:"4x(x-2)",                           hint:"HCF = 4x.",                                      steps:["= 4x(x − 2)"],                                            pts:12},
+        {q:"Factorise:\nx^2 + 5x + 6",            a:"(x+2)(x+3)|(x+3)(x+2)",            hint:"Two numbers: × = 6, + = 5.",                    steps:["2 × 3 = 6,  2 + 3 = 5","= (x+2)(x+3)"],                  pts:14},
+        {q:"Factorise:\nx^2 − 7x + 12",           a:"(x-3)(x-4)|(x-4)(x-3)",            hint:"Two numbers: × = 12, + = −7.",                  steps:["−3 × −4 = 12,  −3 + (−4) = −7","= (x−3)(x−4)"],         pts:14},
+        {q:"Factorise:\nx^2 − 9",                 a:"(x+3)(x-3)|(x-3)(x+3)",            hint:"Difference of squares: a²−b²=(a+b)(a−b).",     steps:["= x^2 − 3^2","= (x+3)(x−3)"],                           pts:14},
+        {q:"Factorise:\nx^2 − 25",                a:"(x+5)(x-5)|(x-5)(x+5)",            hint:"25 = 5².",                                       steps:["= (x+5)(x−5)"],                                           pts:12},
+        {q:"Factorise:\nx^2 + 2x − 8",            a:"(x+4)(x-2)|(x-2)(x+4)",            hint:"Two numbers: × = −8, + = 2.",                   steps:["4 × (−2) = −8,  4 + (−2) = 2","= (x+4)(x−2)"],          pts:14},
+        {q:"Factorise:\n2x^2 + 7x + 3",           a:"(2x+1)(x+3)|(x+3)(2x+1)",          hint:"Try (2x+a)(x+b) where ab=3, 2b+a=7.",          steps:["Try (2x+1)(x+3)","Check: 2x^2+6x+x+3 = 2x^2+7x+3 ✓","= (2x+1)(x+3)"], pts:20},
+        {q:"Factorise:\n5x^2 − 5",                a:"5(x+1)(x-1)|5(x-1)(x+1)",          hint:"Factor 5 first, then difference of squares.",   steps:["= 5(x^2 − 1)","= 5(x+1)(x−1)"],                         pts:18},
+        {q:"Factorise:\n3x^2 − 12x + 9",          a:"3(x-1)(x-3)|3(x-3)(x-1)",          hint:"Factor 3 first.",                                steps:["= 3(x^2 − 4x + 3)","= 3(x−1)(x−3)"],                    pts:18},
+        {q:"Factorise:\nx^2 − 4x − 5",            a:"(x-5)(x+1)|(x+1)(x-5)",            hint:"Two numbers: × = −5, + = −4.",                  steps:["−5 × 1 = −5,  −5 + 1 = −4","= (x−5)(x+1)"],            pts:14},
+        {q:"Factorise:\n6x^2 + 9x",               a:"3x(2x+3)",                          hint:"HCF = 3x.",                                      steps:["= 3x(2x + 3)"],                                           pts:12},
+        {q:"Factorise:\n4x^2 − 12x + 9",          a:"(2x-3)^2|(2x-3)(2x-3)",            hint:"Perfect square: (2x−3)².",                      steps:["= (2x−3)^2"],                                             pts:18},
+        {q:"Factorise:\n2x^2 − 8",                a:"2(x+2)(x-2)|2(x-2)(x+2)",          hint:"Factor 2 first, then difference of squares.",   steps:["= 2(x^2 − 4)","= 2(x+2)(x−2)"],                         pts:16},
+    ]
+};
+
+const CAT_LABELS = {
+    linear:'🔢 Linear Equations', expression:'📐 Linear Expressions',
+    substitution:'🔄 Substitution', fraction:'🔢 Fractional Expressions',
+    fracop:'✖️ Fraction Operations', factorise:'🔣 Factorisation'
+};
+const FMT_HINTS = {
+    linear:'Answer: a number or fraction, e.g.  4  or  13/4',
+    expression:'e.g.  6x  or  x^2+8x+15  (use ^ for powers)',
+    substitution:'Answer: a number, e.g.  −1  or  4.5',
+    fraction:'e.g.  x−2  or  (x+2)/(2x)',
+    fracop:'Simplify fully, e.g.  3/2  or  x/2  or  (x+2)/2',
+    factorise:'Use brackets, e.g.  (x+3)(x−2)  or  3(x−1)(x−3)'
+};
+
+/* ═══════════════════════════════════════════════════════
+   GAME STATE
+═══════════════════════════════════════════════════════ */
+let G = {}, SAVED = {};
+function blankState() {
+    return {
+        mode:'battle', p1Name:'Player 1', p2Name:'Player 2',
+        p1Score:0, p2Score:0, p1Streak:0, p2Streak:0,
+        currentPlayer:1, round:0, totalRounds:10, timePerQ:120,
+        selectedCats:Object.keys(QB), usedQ:[], currentQ:null,
+        cardFlipped:false, answered:false, timer:null, timeLeft:120, frozen:false,
+        hintPU:2, skipPU:2, timePU:2, freezePU:1,
+        totalCorrect:0, totalWrong:0, maxStreak:0, curStreak:0,
+    };
+}
+
+/* ═══════════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════════ */
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0,0);
+}
+function showHome()     { clearInterval(G.timer); showScreen('homeScreen'); }
+function showPractice() { showScreen('practiceScreen'); }
+function showSetup(mode) {
+    SAVED.mode = mode;
+    document.getElementById('p2Group').style.display = mode==='battle'?'block':'none';
+    document.querySelectorAll('.cat-toggle').forEach(b=>b.classList.add('on'));
+    setPills('#roundPills','10'); setPills('#timePills','120');
+    showScreen('setupScreen');
+}
+function setPills(sel,val) { document.querySelectorAll(sel+' .pill').forEach(p=>p.classList.toggle('on',p.dataset.val===val)); }
+
+document.querySelectorAll('.cat-toggle').forEach(b=>b.addEventListener('click',()=>b.classList.toggle('on')));
+document.querySelectorAll('#roundPills .pill').forEach(b=>b.addEventListener('click',()=>{setPills('#roundPills','');b.classList.add('on');}));
+document.querySelectorAll('#timePills .pill').forEach(b=>b.addEventListener('click',()=>{setPills('#timePills','');b.classList.add('on');}));
+
+/* ═══════════════════════════════════════════════════════
+   START / REPLAY
+═══════════════════════════════════════════════════════ */
+function startGame() {
+    const cats=[...$all('.cat-toggle.on')].map(b=>b.dataset.cat);
+    if(!cats.length){alert('Please select at least one topic!');return;}
+    const rp=$1('#roundPills .pill.on'), tp=$1('#timePills .pill.on');
+    SAVED = {
+        mode:SAVED.mode||'battle',
+        p1Name:$1('#p1Name').value.trim()||'Player 1',
+        p2Name:$1('#p2Name').value.trim()||'Player 2',
+        totalRounds:parseInt(rp?.dataset.val??10),
+        timePerQ:parseInt(tp?.dataset.val??120),
+        selectedCats:cats,
+    };
+    launchGame();
+}
+function replayGame() { launchGame(); }
+function launchGame() {
+    G = Object.assign(blankState(),SAVED);
+    showScreen('gameScreen');
+    updateScoreboard();
+    nextQuestion();
+}
+function startPractice(cat) {
+    SAVED={mode:'solo',p1Name:'You',p2Name:'—',totalRounds:QB[cat].length,timePerQ:0,selectedCats:[cat]};
+    G=Object.assign(blankState(),SAVED,{hintPU:99,skipPU:99,timePU:99,freezePU:99});
+    showScreen('gameScreen');
+    updateScoreboard();
+    nextQuestion();
+}
+
+/* ═══════════════════════════════════════════════════════
+   QUESTION FLOW
+═══════════════════════════════════════════════════════ */
+function pickQ() {
+    const pool=[];
+    G.selectedCats.forEach(cat=>QB[cat].forEach((q,i)=>{
+        const id=cat+'-'+i;
+        if(!G.usedQ.includes(id))pool.push({...q,_id:id,_cat:cat});
+    }));
+    if(!pool.length){G.usedQ=[];return pickQ();}
+    const q=pool[Math.floor(Math.random()*pool.length)];
+    G.usedQ.push(q._id);
+    return q;
+}
+
+function nextQuestion() {
+    if(G.round>=G.totalRounds){endGame();return;}
+    G.round++; G.answered=false; G.cardFlipped=false; G.frozen=false;
+    G.currentQ=pickQ();
+
+    // Reset card
+    $('flipCard').classList.remove('flipped');
+
+    // Reset inputs
+    const inp=$('g_ansInput');
+    inp.value=''; inp.className='answer-input';
+    inp.style.borderColor=''; inp.style.boxShadow='';
+    inp.disabled=false;
+    $('g_submitBtn').disabled=false;
+
+    // Reset feedback areas
+    $('g_feedback').className='feedback';
+    $('g_hintBox').className='hint-box';
+    $('g_steps').className='steps-box';
+    $('g_correctAns').className='correct-ans-display';
+
+    // ── RENDER QUESTION with proper fraction display ──
+    $('g_qCat').textContent = CAT_LABELS[G.currentQ._cat];
+    $('g_qDisplay').innerHTML = renderQuestion(G.currentQ.q);
+
+    // Fill other UI
+    $('g_catChip').textContent   = CAT_LABELS[G.currentQ._cat];
+    $('g_roundLbl').textContent  = `Round ${G.round} / ${G.totalRounds}`;
+    $('g_hintBox').textContent   = G.currentQ.hint || '';
+    $('g_fmtHint').textContent   = FMT_HINTS[G.currentQ._cat] || '';
+
+    // ── RENDER STEPS with fractions ──
+    $('g_stepsBody').innerHTML = (G.currentQ.steps||[]).map(renderStep).join('');
+
+    // Power-up badges
+    const puSet=(btnId,cntId,val,extra)=>{
+        $(cntId).textContent=val===99?'∞':val;
+        $(btnId).disabled=val<=0||(extra&&G.timePerQ===0);
+    };
+    puSet('puHint','puHintN',G.hintPU,false);
+    puSet('puSkip','puSkipN',G.skipPU,false);
+    puSet('puTime','puTimeN',G.timePU,true);
+    puSet('puFreeze','puFreezeN',G.freezePU,true);
+
+    updateScoreboard();
+    startTimer();
+    inp.focus();
+}
+
+/* ═══════════════════════════════════════════════════════
+   FLIP CARD
+═══════════════════════════════════════════════════════ */
+function flipCard() {
+    if(G.answered)return;
+    $('flipCard').classList.toggle('flipped');
+    G.cardFlipped=$('flipCard').classList.contains('flipped');
+}
+
+/* ═══════════════════════════════════════════════════════
+   TIMER
+═══════════════════════════════════════════════════════ */
+function getMultiplier() {
+    if(G.timePerQ===0)return 1;
+    const p=G.timeLeft/G.timePerQ;
+    return p>0.75?3:p>0.5?2:p>0.25?1.5:1;
+}
+function updateBonusUI() {
+    const m=getMultiplier();
+    [{m:3,id:'bz0'},{m:2,id:'bz1'},{m:1.5,id:'bz2'},{m:1,id:'bz3'}].forEach(z=>{
+        $(z.id).classList.toggle('active',m===z.m);
+    });
+    const base=G.currentQ?G.currentQ.pts:0;
+    $('g_ptsLbl').textContent=`+${Math.round(base*m)} pts (×${m})`;
+}
+function startTimer() {
+    clearInterval(G.timer);
+    if(G.timePerQ===0){$('g_timerTxt').textContent='⏱ ∞';$('g_timerBar').style.width='100%';updateBonusUI();return;}
+    G.timeLeft=G.timePerQ; renderTimer();
+    G.timer=setInterval(()=>{
+        if(G.frozen)return;
+        G.timeLeft=Math.max(0,G.timeLeft-1);
+        renderTimer();
+        if(G.timeLeft<=0){clearInterval(G.timer);if(!G.answered)timeOut();}
+    },1000);
+}
+function renderTimer() {
+    const pct=G.timePerQ>0?(G.timeLeft/G.timePerQ)*100:100;
+    $('g_timerBar').style.width=pct+'%';
+    $('g_timerTxt').textContent=`⏱ ${G.timeLeft}s`;
+    updateBonusUI();
+}
+function timeOut() {
+    if(G.answered)return;
+    G.answered=true;
+    showFeedback('timeout','⏰ Time\'s up!');
+    showCorrectAnswer();
+    handleWrong();
+    $('g_ansInput').disabled=true; $('g_submitBtn').disabled=true;
+    $('g_steps').className='steps-box show';
+    setTimeout(()=>{switchPlayer();nextQuestion();},4000);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SHOW CORRECT ANSWER (rendered with fractions)
+═══════════════════════════════════════════════════════ */
+function showCorrectAnswer() {
+    const displayAns = G.currentQ.a.split('|')[0]; // take first accepted form
+    $('g_correctAnsMath').innerHTML = renderMath(escapeHTML(displayAns).replace(/&amp;/g,'&'));
+    $('g_correctAns').className = 'correct-ans-display show';
+}
+
+/* ═══════════════════════════════════════════════════════
+   SUBMIT & CHECK
+═══════════════════════════════════════════════════════ */
+function submitAnswer() {
+    if(G.answered)return;
+    if(!G.cardFlipped){flipCard();return;}
+    const raw=$('g_ansInput').value.trim();
+    if(!raw){$('g_ansInput').focus();return;}
+
+    G.answered=true;
+    clearInterval(G.timer);
+    $('g_submitBtn').disabled=true;
+    $('g_ansInput').disabled=true;
+    $('g_ansInput').classList.remove('live-ok');
+    $('g_ansInput').style.borderColor='';
+    $('g_ansInput').style.boxShadow='';
+
+    const ok=checkAnswer(raw,G.currentQ.a);
+    if(ok){
+        $('g_ansInput').classList.add('ans-correct');
+        const m=getMultiplier(), earned=Math.round(G.currentQ.pts*m);
+        showFeedback('correct',`✅ Correct!  +${earned} pts${m>1?'  ⚡ ×'+m+' Speed Bonus!':''}`);
+        handleCorrect(earned,m);
+        if(m>=2)showBonusToast(`+${earned} pts\n⚡ ×${m} BONUS!`);
+        confetti(m>=3?40:m>=2?26:18);
+        setTimeout(()=>{switchPlayer();nextQuestion();},2400);
+    } else {
+        $('g_ansInput').classList.add('ans-wrong');
+        showFeedback('wrong','❌ Incorrect.');
+        showCorrectAnswer();
+        handleWrong();
+        $('g_steps').className='steps-box show';
+        setTimeout(()=>{switchPlayer();nextQuestion();},4200);
+    }
+}
+
+function liveCheck() {
+    if(G.answered)return;
+    const raw=$('g_ansInput').value.trim();
+    $('g_ansInput').classList.remove('live-ok');
+    $('g_ansInput').style.borderColor=''; $('g_ansInput').style.boxShadow='';
+    if(raw&&G.currentQ&&checkAnswer(raw,G.currentQ.a)){
+        $('g_ansInput').classList.add('live-ok');
+    }
+}
+function handleKey(e){if(e.key==='Enter')submitAnswer();}
+function skipQuestion(){
+    if(G.answered)return;
+    G.answered=true; clearInterval(G.timer); G.curStreak=0;
+    showFeedback('wrong','⏭️ Skipped!');
+    showCorrectAnswer();
+    $('g_steps').className='steps-box show';
+    $('g_submitBtn').disabled=true;
+    updateStats();
+    setTimeout(()=>{switchPlayer();nextQuestion();},4000);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCORE
+═══════════════════════════════════════════════════════ */
+function handleCorrect(earned,m){
+    G.totalCorrect++; G.curStreak++;
+    if(G.curStreak>G.maxStreak)G.maxStreak=G.curStreak;
+    if(G.currentPlayer===1){G.p1Score+=earned;G.p1Streak++;}
+    else{G.p2Score+=earned;G.p2Streak++;}
+    updateScoreboard();updateStats();
+}
+function handleWrong(){
+    G.totalWrong++;G.curStreak=0;
+    if(G.currentPlayer===1)G.p1Streak=0; else G.p2Streak=0;
+    updateScoreboard();updateStats();
+}
+
+/* ═══════════════════════════════════════════════════════
+   POWER-UPS
+═══════════════════════════════════════════════════════ */
+function useHintPU(){
+    if(G.hintPU===0)return;
+    if(G.hintPU!==99){G.hintPU--;$('puHintN').textContent=G.hintPU;}
+    $('puHint').disabled=G.hintPU<=0;
+    $('g_hintBox').className='hint-box show';
+}
+function useSkipPU(){
+    if(G.skipPU===0)return;
+    if(G.skipPU!==99){G.skipPU--;$('puSkipN').textContent=G.skipPU;}
+    $('puSkip').disabled=G.skipPU<=0;
+    skipQuestion();
+}
+function useTimePU(){
+    if(G.timePU===0||G.timePerQ===0)return;
+    if(G.timePU!==99){G.timePU--;$('puTimeN').textContent=G.timePU;}
+    $('puTime').disabled=G.timePU<=0;
+    G.timeLeft=Math.min(G.timeLeft+30,G.timePerQ);
+    renderTimer(); showBonusToast('+30s ⏰');
+}
+function useFreezePU(){
+    if(G.freezePU===0||G.timePerQ===0||G.frozen)return;
+    if(G.freezePU!==99){G.freezePU--;$('puFreezeN').textContent=G.freezePU;}
+    $('puFreeze').disabled=G.freezePU<=0;
+    G.frozen=true; showBonusToast('❄️ Timer Frozen!\n10 seconds');
+    $('g_timerBar').style.background='#a8edea';
+    setTimeout(()=>{G.frozen=false;$('g_timerBar').style.background='';},10000);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCOREBOARD & STATS
+═══════════════════════════════════════════════════════ */
+function updateScoreboard(){
+    $('g_p1name').textContent=G.p1Name;
+    $('g_p2name').textContent=G.mode==='battle'?G.p2Name:'—';
+    $('g_p1score').textContent=G.p1Score;
+    $('g_p2score').textContent=G.mode==='battle'?G.p2Score:'—';
+    $('g_p1streak').textContent=`🔥 ${G.p1Streak}`;
+    $('g_p2streak').textContent=G.mode==='battle'?`🔥 ${G.p2Streak}`:'';
+    const ti=$('g_turn');
+    if(G.mode==='battle'){
+        ti.textContent=(G.currentPlayer===1?G.p1Name:G.p2Name)+"'s Turn";
+        ti.className='turn-pill '+(G.currentPlayer===1?'turn-p1':'turn-p2');
+    } else {ti.textContent='Your Turn';ti.className='turn-pill turn-p1';}
+}
+function switchPlayer(){if(G.mode==='battle')G.currentPlayer=G.currentPlayer===1?2:1;}
+function updateStats(){
+    const tot=G.totalCorrect+G.totalWrong;
+    $('st_correct').textContent=G.totalCorrect;
+    $('st_wrong').textContent=G.totalWrong;
+    $('st_streak').textContent=G.maxStreak;
+    $('st_acc').textContent=tot>0?Math.round(G.totalCorrect/tot*100)+'%':'—';
+}
+
+/* ═══════════════════════════════════════════════════════
+   FEEDBACK
+═══════════════════════════════════════════════════════ */
+function showFeedback(type,msg){
+    const el=$('g_feedback');
+    el.textContent=msg;
+    const m={correct:'fb-correct',wrong:'fb-wrong',timeout:'fb-timeout'};
+    el.className=`feedback show ${m[type]||''}`;
+}
+
+/* ═══════════════════════════════════════════════════════
+   END GAME
+═══════════════════════════════════════════════════════ */
+function endGame(){
+    clearInterval(G.timer);
+    const tot=G.totalCorrect+G.totalWrong, acc=tot>0?Math.round(G.totalCorrect/tot*100):0;
+    $('w_p1name').textContent=G.p1Name; $('w_p2name').textContent=G.mode==='battle'?G.p2Name:'—';
+    $('w_p1score').textContent=G.p1Score; $('w_p2score').textContent=G.mode==='battle'?G.p2Score:'—';
+    let winnerName,trophy;
+    if(G.mode==='battle'){
+        if(G.p1Score>G.p2Score){winnerName=G.p1Name;trophy='🏆';}
+        else if(G.p2Score>G.p1Score){winnerName=G.p2Name;trophy='🏆';}
+        else{winnerName="It's a Draw!";trophy='🤝';}
+    } else {winnerName=G.p1Name;trophy=acc>=80?'🏆':acc>=60?'🥈':'🥉';}
+    $('w_trophy').textContent=trophy; $('w_name').textContent=winnerName;
+    $('w_stats').innerHTML=`✅ Correct: <strong>${G.totalCorrect}</strong> &nbsp;|&nbsp; ❌ Wrong: <strong>${G.totalWrong}</strong> &nbsp;|&nbsp; 🎯 Accuracy: <strong>${acc}%</strong><br>🔥 Best Streak: <strong>${G.maxStreak}</strong> &nbsp;|&nbsp; 📝 Rounds: <strong>${G.totalRounds}</strong>`;
+    showScreen('winnerScreen'); confetti(70);
+}
+
+/* ═══════════════════════════════════════════════════════
+   BONUS TOAST & CONFETTI
+═══════════════════════════════════════════════════════ */
+function showBonusToast(msg){
+    const t=document.getElementById('bonusToast');
+    t.textContent=msg; t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),1800);
+}
+function confetti(n=20){
+    const cols=['#f6d365','#f093fb','#43e97b','#38f9d7','#f5576c','#667eea','#fda085'];
+    for(let i=0;i<n;i++){
+        const p=document.createElement('div');
+        p.className='confetti-piece';
+        const dx=(Math.random()-0.5)*160;
+        p.style.cssText=`left:${Math.random()*100}vw;--dx:${dx}px;background:${cols[Math.floor(Math.random()*cols.length)]};animation-duration:${(Math.random()*2+2).toFixed(1)}s;animation-delay:${(Math.random()*0.7).toFixed(2)}s;width:${Math.round(Math.random()*8+5)}px;height:${Math.round(Math.random()*8+5)}px;border-radius:${Math.random()>.5?'50%':'3px'};`;
+        document.body.appendChild(p);
+        p.addEventListener('animationend',()=>p.remove());
+    }
+}
+function closePopup(){document.getElementById('popupOverlay').classList.remove('show');}
+
+/* helpers */
+function $(id){return document.getElementById(id);}
+function $1(sel){return document.querySelector(sel);}
+function $all(sel){return document.querySelectorAll(sel);}
+</script>
+</body>
+</html>
