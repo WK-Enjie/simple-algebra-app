@@ -27,7 +27,6 @@
         .screen-scroll  { align-items:center; overflow-y:auto; padding:clamp(12px,3vw,24px) clamp(12px,3vw,24px) 30px; -webkit-overflow-scrolling:touch; }
 
         /* ── MATH FRACTION RENDERING ── */
-        /* Inline fraction:  num/den displayed as stacked */
         .mfrac {
             display: inline-flex;
             flex-direction: column;
@@ -48,7 +47,6 @@
             line-height: 1.3;
         }
 
-        /* Math expression container */
         .math-expr {
             display: inline-flex;
             align-items: center;
@@ -59,10 +57,8 @@
             font-family: 'Segoe UI', Georgia, serif;
         }
 
-        /* Superscript powers */
         .mpow { font-size: 0.65em; vertical-align: super; }
 
-        /* Question display block */
         .q-display {
             display: flex;
             flex-direction: column;
@@ -88,7 +84,6 @@
             line-height: 2.5;
         }
 
-        /* Solution steps with fractions */
         .step-math {
             display: flex;
             align-items: center;
@@ -214,7 +209,6 @@
         #gameScreen { justify-content:flex-start; padding-top:15px; overflow-y:auto; -webkit-overflow-scrolling:touch; }
         .game-wrap { width:100%; max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:clamp(8px,1.8vw,13px); }
 
-        /* Scoreboard */
         .scoreboard {
             display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px;
             background:var(--glass); border:1px solid var(--glass-border);
@@ -232,12 +226,10 @@
         .turn-p2 { background:rgba(240,147,251,0.18); color:var(--secondary); border:1.5px solid var(--secondary); }
         .timer-text { font-size:clamp(0.7rem,1.8vw,0.85rem); color:var(--text-muted); font-weight:600; }
 
-        /* Timer */
         .timer-track { width:100%; height:clamp(7px,1.5vw,11px); background:rgba(255,255,255,0.1); border-radius:99px; overflow:hidden; }
         .timer-fill { height:100%; width:100%; border-radius:99px; transition:width 1s linear; background:linear-gradient(90deg,var(--accent),var(--gold),var(--danger)); }
         .timer-labels { display:flex; justify-content:space-between; font-size:clamp(0.6rem,1.4vw,0.72rem); color:rgba(255,255,255,0.45); margin-top:3px; padding:0 2px; }
 
-        /* Bonus zones */
         .bz-row { display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(5px,1.2vw,8px); }
         .bz { padding:clamp(5px,1.2vw,8px) 4px; border-radius:10px; text-align:center; font-size:clamp(0.58rem,1.4vw,0.72rem); font-weight:700; border:1.5px solid; transition:all 0.4s; line-height:1.4; }
         .bz-hot  { background:rgba(245,87,108,0.12);  border-color:rgba(245,87,108,0.5);  color:#f5576c; }
@@ -247,13 +239,11 @@
         .bz.active { transform:scale(1.07); box-shadow:0 0 10px currentColor; opacity:1; }
         .bz:not(.active) { opacity:0.5; }
 
-        /* Game meta */
         .game-meta { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; }
         .round-label { color:var(--text-muted); font-weight:600; font-size:clamp(0.72rem,1.8vw,0.88rem); }
         .cat-chip { padding:4px 12px; border-radius:20px; font-size:clamp(0.62rem,1.5vw,0.75rem); font-weight:700; background:linear-gradient(135deg,var(--accent),#38f9d7); color:#1a1a2e; }
         .pts-label { color:var(--gold); font-weight:700; font-size:clamp(0.72rem,1.8vw,0.88rem); white-space:nowrap; }
 
-        /* Power-ups */
         .pu-row { display:flex; flex-wrap:wrap; gap:clamp(5px,1.2vw,8px); justify-content:center; }
         .pu-btn {
             display:inline-flex; align-items:center; gap:5px;
@@ -267,7 +257,6 @@
         .pu-btn:disabled { opacity:0.3; cursor:not-allowed; }
         .pu-badge { background:rgba(246,211,101,0.28); border-radius:50%; min-width:18px; height:18px; display:inline-flex; align-items:center; justify-content:center; font-size:0.72rem; }
 
-        /* Flip card */
         .flip-scene { width:100%; perspective:1000px; cursor:pointer; touch-action:manipulation; user-select:none; }
         .flip-card { width:100%; height:clamp(180px,30vw,260px); position:relative; transform-style:preserve-3d; transition:transform 0.65s cubic-bezier(0.4,0.2,0.2,1); }
         .flip-card.flipped { transform:rotateY(180deg); }
@@ -278,7 +267,6 @@
         .flip-hint { font-size:clamp(0.72rem,1.8vw,0.88rem); color:var(--text-muted); }
         .q-cat-label { font-size:clamp(0.6rem,1.5vw,0.75rem); color:var(--text-muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; font-weight:600; }
 
-        /* Answer area */
         .answer-card { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:var(--radius-lg); padding:clamp(14px,3vw,22px); display:flex; flex-direction:column; gap:clamp(9px,2vw,13px); }
         .answer-row { display:flex; gap:clamp(7px,1.5vw,11px); align-items:stretch; }
         .answer-input {
@@ -301,14 +289,12 @@
         .btn-skip:active { transform:scale(0.95); }
         .format-hint-text { font-size:clamp(0.62rem,1.5vw,0.75rem); color:rgba(168,237,234,0.6); text-align:center; }
 
-        /* Feedback */
         .feedback { display:none; padding:clamp(9px,2vw,13px) clamp(14px,3vw,18px); border-radius:12px; font-weight:700; font-size:clamp(0.8rem,2vw,0.95rem); text-align:center; }
         .feedback.show { display:block; }
         .fb-correct { background:rgba(67,233,123,0.17); color:var(--accent); border:1px solid var(--accent); }
         .fb-wrong   { background:rgba(245,87,108,0.17); color:var(--danger); border:1px solid var(--danger); }
         .fb-timeout { background:rgba(253,160,133,0.17); color:#fda085; border:1px solid #fda085; }
 
-        /* Correct answer display */
         .correct-ans-display {
             display:none;
             background:rgba(255,255,255,0.06);
@@ -321,18 +307,15 @@
         .correct-ans-label { color:var(--text-muted); font-size:0.8em; margin-bottom:6px; }
         .correct-ans-math { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:4px; font-weight:700; font-size:1.1em; }
 
-        /* Hint */
         .hint-toggle-btn { background:rgba(246,211,101,0.1); border:1px solid rgba(246,211,101,0.3); border-radius:10px; color:var(--gold); padding:clamp(7px,1.8vw,10px) 16px; font-size:clamp(0.75rem,1.9vw,0.88rem); font-weight:600; cursor:pointer; transition:all 0.2s; touch-action:manipulation; width:100%; text-align:center; }
         .hint-toggle-btn:hover { background:rgba(246,211,101,0.2); }
         .hint-box { display:none; background:rgba(246,211,101,0.07); border-radius:10px; padding:clamp(9px,2vw,13px) clamp(12px,2.5vw,16px); color:var(--gold); font-size:clamp(0.75rem,1.9vw,0.88rem); line-height:1.65; }
         .hint-box.show { display:block; }
 
-        /* Steps */
         .steps-box { display:none; background:rgba(255,255,255,0.04); border-radius:12px; padding:clamp(10px,2.2vw,15px); }
         .steps-box.show { display:block; }
         .steps-title { color:var(--accent); font-size:clamp(0.75rem,1.9vw,0.88rem); font-weight:700; margin-bottom:8px; }
 
-        /* Stats */
         .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(5px,1.2vw,8px); }
         .stat-box { background:rgba(255,255,255,0.05); border-radius:11px; padding:clamp(7px,1.8vw,11px) 4px; text-align:center; }
         .stat-val { font-size:clamp(1rem,2.8vw,1.4rem); font-weight:800; }
@@ -351,21 +334,17 @@
         .winner-actions { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:clamp(14px,3vw,22px); }
         .winner-actions .btn-primary, .winner-actions .btn-danger { max-width:180px; padding:12px 20px; }
 
-        /* ── POPUP ── */
         .popup-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.78); display:none; align-items:center; justify-content:center; z-index:900; backdrop-filter:blur(4px); padding:20px; }
         .popup-overlay.show { display:flex; }
         .popup-box { background:linear-gradient(135deg,#302b63,var(--bg3)); border-radius:var(--radius-lg); padding:clamp(24px,5vw,40px) clamp(20px,4vw,38px); max-width:400px; width:100%; text-align:center; border:2px solid rgba(255,255,255,0.13); animation:popIn 0.38s cubic-bezier(0.34,1.56,0.64,1); }
         @keyframes popIn { 0%{transform:scale(0.45);opacity:0} 100%{transform:scale(1);opacity:1} }
 
-        /* ── BONUS TOAST ── */
         .bonus-toast { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0); background:linear-gradient(135deg,var(--gold),#fda085); color:#1a1a2e; font-size:clamp(1.2rem,4vw,1.8rem); font-weight:900; padding:clamp(12px,3vw,18px) clamp(22px,5vw,36px); border-radius:18px; z-index:800; transition:transform 0.28s cubic-bezier(0.34,1.56,0.64,1),opacity 0.28s; pointer-events:none; text-align:center; white-space:pre-line; line-height:1.3; }
         .bonus-toast.show { transform:translate(-50%,-50%) scale(1); }
 
-        /* ── CONFETTI ── */
         .confetti-piece { position:fixed; top:-12px; border-radius:3px; animation:cfFall linear forwards; pointer-events:none; z-index:9999; }
         @keyframes cfFall { 0%{transform:translateY(0) rotate(0deg) translateX(0);opacity:1} 100%{transform:translateY(105vh) rotate(600deg) translateX(var(--dx,0px));opacity:0} }
 
-        /* Responsive */
         @media(min-width:600px) { .practice-grid { grid-template-columns:repeat(3,1fr); } }
         @media(min-width:768px) { .cat-grid { grid-template-columns:repeat(3,1fr); } }
         @media(max-height:500px) and (orientation:landscape) { .flip-card { height:130px; } .flip-icon { font-size:1.5rem; } }
@@ -522,7 +501,6 @@
             </div>
             <div class="card-face face-back">
                 <div class="q-cat-label" id="g_qCat"></div>
-                <!-- Rendered math question -->
                 <div class="q-display" id="g_qDisplay"></div>
             </div>
         </div>
@@ -542,7 +520,6 @@
         <div class="format-hint-text" id="g_fmtHint"></div>
         <div class="feedback" id="g_feedback"></div>
 
-        <!-- Correct answer rendered nicely -->
         <div class="correct-ans-display" id="g_correctAns">
             <div class="correct-ans-label">✅ Correct Answer:</div>
             <div class="correct-ans-math" id="g_correctAnsMath"></div>
@@ -603,154 +580,169 @@
 'use strict';
 
 /* ═══════════════════════════════════════════════════════
-   MATH RENDERER  — converts text notation to HTML fractions
-   ═══════════════════════════════════════════════════════
-   Supports:
-     a/b          → stacked fraction
-     (expr)/(expr) → stacked fraction with expressions
-     x^2          → x²
-     x²           → kept as-is (unicode)
-     plain text    → plain text
-*/
+   MATH RENDERER  —  fixed: superscripts & fractions
+   ═══════════════════════════════════════════════════════ */
 
 /**
- * Parse a string like "(2x+4)/(x+2)" or "1/x" or "3x-8"
- * and return an HTML string with proper stacked fractions.
+ * Render a math expression string to HTML.
+ * Supports:
+ *   x^2  → x<sup>2</sup>
+ *   a/b  → stacked fraction (a over b)
+ *   (expr)/(expr) → stacked fraction
+ *   (expr)/simple → stacked fraction
+ *   simple/(expr) → stacked fraction
  */
 function renderMath(text) {
     if (!text) return '';
 
-    // Step 1: protect superscripts — convert x^2 → x<sup>2</sup>
-    // and existing unicode like x² → x<sup>2</sup>
-    let s = text
-        .replace(/\^(\d+)/g, '<sup>$1</sup>')
-        .replace(/²/g, '<sup>2</sup>')
-        .replace(/³/g, '<sup>3</sup>');
+    // 1) Escape HTML special characters so user text is safe,
+    //    but we'll generate our own <sup> and <span> tags.
+    let s = escapeHTML(text);
 
-    // Step 2: find all fraction patterns and convert to stacked HTML
-    // Pattern: (complex_expr)/(complex_expr)  OR  simple/simple
-    // We process from left to right, greedy matching brackets
+    // 2) Convert superscripts: x^2 → x<sup>2</sup>
+    //    Also handle unicode ² ³
+    s = s.replace(/\^(\d+)/g, '<sup>$1</sup>')
+         .replace(/²/g, '<sup>2</sup>')
+         .replace(/³/g, '<sup>3</sup>');
+
+    // 3) Convert fractions: a/b or (expr)/(expr)
+    //    We use a simple regex-based approach that won't interfere with <sup>.
+    //    We'll find patterns like: (expr)/(expr) or simple/simple
+    //    But we must not match inside HTML tags (e.g. <sup>2</sup> has no slash).
+    //    We'll process the string left-to-right, looking for '/'
+    //    and checking if the left and right sides are valid fraction parts.
 
     let result = '';
     let i = 0;
     while (i < s.length) {
-        // Try to match a fraction starting at position i
-        const fracResult = tryParseFraction(s, i);
-        if (fracResult) {
-            result += buildFracHTML(fracResult.num, fracResult.den);
-            i = fracResult.end;
+        // Look for a '/' character
+        let slashIdx = s.indexOf('/', i);
+        if (slashIdx === -1) {
+            result += s.slice(i);
+            break;
+        }
+
+        // Check if this '/' is part of a fraction.
+        // We need to find the numerator (before '/') and denominator (after '/').
+        // The numerator can be:
+        //   - a token: letters, digits, +, -, *, spaces, and <sup> tags
+        //   - a parenthesized expression: ( ... )
+        // The denominator can be:
+        //   - a token
+        //   - a parenthesized expression: ( ... )
+
+        // Get the numerator: scan left from slashIdx-1
+        let numStart = slashIdx - 1;
+        let numEnd = slashIdx;
+
+        // Skip whitespace
+        while (numStart >= 0 && s[numStart] === ' ') numStart--;
+
+        // Check if numerator is a parenthesized expression
+        let numIsParen = false;
+        if (numStart >= 0 && s[numStart] === ')') {
+            // Find matching '('
+            let depth = 0;
+            let openIdx = -1;
+            for (let j = numStart; j >= 0; j--) {
+                if (s[j] === ')') depth++;
+                else if (s[j] === '(') { depth--; if (depth === 0) { openIdx = j; break; } }
+            }
+            if (openIdx !== -1) {
+                numStart = openIdx;
+                numIsParen = true;
+            }
         } else {
-            result += s[i];
-            i++;
+            // Not parenthesized: find the start of the token
+            // Token chars: letters, digits, +, -, *, ., <, > (for tags)
+            while (numStart >= 0) {
+                const ch = s[numStart];
+                // Allow letters, digits, +, -, *, ., <, >, =, space
+                if (/[a-zA-Z0-9+\-*\.<>= ]/.test(ch)) {
+                    numStart--;
+                } else {
+                    break;
+                }
+            }
+            numStart++;
+        }
+
+        // Get the numerator text
+        let numText = s.slice(numStart, slashIdx).trim();
+
+        // Get the denominator: scan right from slashIdx+1
+        let denStart = slashIdx + 1;
+        while (denStart < s.length && s[denStart] === ' ') denStart++;
+
+        let denEnd = denStart;
+        let denIsParen = false;
+        if (denStart < s.length && s[denStart] === '(') {
+            // Find matching ')'
+            let depth = 0;
+            let closeIdx = -1;
+            for (let j = denStart; j < s.length; j++) {
+                if (s[j] === '(') depth++;
+                else if (s[j] === ')') { depth--; if (depth === 0) { closeIdx = j; break; } }
+            }
+            if (closeIdx !== -1) {
+                denEnd = closeIdx + 1;
+                denIsParen = true;
+            }
+        }
+
+        if (!denIsParen) {
+            // Not parenthesized: grab a token
+            let j = denStart;
+            while (j < s.length) {
+                const ch = s[j];
+                if (/[a-zA-Z0-9+\-*\.<>= ]/.test(ch)) {
+                    j++;
+                } else {
+                    break;
+                }
+            }
+            denEnd = j;
+        }
+
+        let denText = s.slice(denStart, denEnd).trim();
+
+        // Validate: both numerator and denominator must be non-empty
+        if (numText && denText) {
+            // Build the fraction HTML
+            // But we must avoid matching inside HTML tags like <sup>2</sup> — but that has no '/'
+            // Also avoid matching things like "http://" — but that won't happen in math expressions
+            // We also need to ensure the numerator and denominator don't contain unbalanced brackets
+
+            // Build fraction
+            result += s.slice(i, numStart);
+            result += buildFracHTML(numText, denText);
+            i = denEnd;
+        } else {
+            // Not a valid fraction, just add the '/' and continue
+            result += s.slice(i, slashIdx + 1);
+            i = slashIdx + 1;
         }
     }
+
     return result;
 }
 
-/**
- * Try to parse a fraction (num/den) starting at position i.
- * Returns { num, den, end } or null.
- */
-function tryParseFraction(s, i) {
-    // Case 1: (expr)/(expr)
-    if (s[i] === '(') {
-        const closeFirst = findClose(s, i);
-        if (closeFirst !== -1 && s[closeFirst+1] === '/') {
-            const afterSlash = closeFirst + 2;
-            if (s[afterSlash] === '(') {
-                const closeSecond = findClose(s, afterSlash);
-                if (closeSecond !== -1) {
-                    return {
-                        num: s.slice(i+1, closeFirst),
-                        den: s.slice(afterSlash+1, closeSecond),
-                        end: closeSecond + 1
-                    };
-                }
-            } else {
-                // (expr)/simple — grab simple token
-                const tok = grabToken(s, afterSlash);
-                if (tok.length > 0) {
-                    return {
-                        num: s.slice(i+1, closeFirst),
-                        den: tok,
-                        end: afterSlash + tok.length
-                    };
-                }
-            }
-        }
-    }
-
-    // Case 2: simple/simple  e.g.  3x/4  or  17/12
-    // Only match if: left side is letters/digits/+/- run, right side same
-    const leftTok = grabToken(s, i);
-    if (leftTok.length > 0) {
-        const afterLeft = i + leftTok.length;
-        if (s[afterLeft] === '/') {
-            const afterSlash = afterLeft + 1;
-            if (s[afterSlash] === '(') {
-                const closeP = findClose(s, afterSlash);
-                if (closeP !== -1) {
-                    return {
-                        num: leftTok,
-                        den: s.slice(afterSlash+1, closeP),
-                        end: closeP + 1
-                    };
-                }
-            } else {
-                const rightTok = grabToken(s, afterSlash);
-                if (rightTok.length > 0) {
-                    return {
-                        num: leftTok,
-                        den: rightTok,
-                        end: afterSlash + rightTok.length
-                    };
-                }
-            }
-        }
-    }
-    return null;
-}
-
-/** Find matching closing paren for '(' at position i */
-function findClose(s, i) {
-    let depth = 0;
-    for (let j = i; j < s.length; j++) {
-        if (s[j] === '(') depth++;
-        else if (s[j] === ')') { depth--; if (depth === 0) return j; }
-    }
-    return -1;
-}
-
-/** Grab a "token" — sequence of letters, digits, ^, <sup>...</sup>, +, - (not slash or paren) */
-function grabToken(s, i) {
-    let buf = '';
-    let j = i;
-    // Allow leading minus
-    while (j < s.length) {
-        // Absorb <sup>...</sup> tags
-        if (s.slice(j, j+5) === '<sup>') {
-            const close = s.indexOf('</sup>', j);
-            if (close !== -1) { buf += s.slice(j, close+6); j = close+6; continue; }
-        }
-        const ch = s[j];
-        if (ch === '/' || ch === '(' || ch === ')') break;
-        buf += ch; j++;
-    }
-    return buf.replace(/[+\-]$/, ''); // trim trailing +/-  (they belong to next term)
-}
-
-/** Build the stacked fraction HTML */
+/** Build a stacked fraction HTML */
 function buildFracHTML(num, den) {
-    // Recursively render num and den (they might contain nested fractions — unlikely but safe)
-    const nHTML = num;  // already has <sup> substitutions
-    const dHTML = den;
+    // Recurse to handle nested fractions (num or den may contain '/')
+    const nHTML = renderMath(num);
+    const dHTML = renderMath(den);
     return `<span class="mfrac"><span class="mnum">${nHTML}</span><span class="mden">${dHTML}</span></span>`;
 }
 
+/** Simple HTML escaping (only &, <, >) */
+function escapeHTML(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
 /**
- * Full question renderer — splits on newline:
- * line 0 = instruction ("Solve for x:", "Simplify:", etc.)
- * line 1+ = the math expression
+ * Render a full question: instruction + math expression
+ * qText format: "Instruction text\nmath expression"
  */
 function renderQuestion(qText) {
     const lines = qText.split('\n');
@@ -762,20 +754,16 @@ function renderQuestion(qText) {
         html += `<div class="q-instruction">${escapeHTML(instruction)}</div>`;
     }
     if (expr) {
-        html += `<div class="q-math">${renderMath(escapeHTML(expr).replace(/&amp;/g,'&'))}</div>`;
+        html += `<div class="q-math">${renderMath(expr)}</div>`;
     }
     return html;
 }
 
 /**
- * Render a step string (may contain fractions)
+ * Render a step (can contain math expressions)
  */
 function renderStep(stepText) {
-    return `<div class="step-math">${renderMath(escapeHTML(stepText).replace(/&amp;/g,'&'))}</div>`;
-}
-
-function escapeHTML(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return `<div class="step-math">${renderMath(stepText)}</div>`;
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -841,11 +829,6 @@ function checkAnswer(userRaw,acceptedRaw){
 
 /* ═══════════════════════════════════════════════════════
    QUESTION BANK
-   Each question has:
-     q  : text (line 0 = instruction, line 1 = expression)
-     a  : accepted answer(s) separated by |
-     hint, steps, pts
-     display_a (optional): what to SHOW as the answer (can include / notation)
 ═══════════════════════════════════════════════════════ */
 const QB = {
     linear:[
@@ -1143,8 +1126,8 @@ function timeOut() {
    SHOW CORRECT ANSWER (rendered with fractions)
 ═══════════════════════════════════════════════════════ */
 function showCorrectAnswer() {
-    const displayAns = G.currentQ.a.split('|')[0]; // take first accepted form
-    $('g_correctAnsMath').innerHTML = renderMath(escapeHTML(displayAns).replace(/&amp;/g,'&'));
+    const displayAns = G.currentQ.a.split('|')[0];
+    $('g_correctAnsMath').innerHTML = renderMath(displayAns);
     $('g_correctAns').className = 'correct-ans-display show';
 }
 
