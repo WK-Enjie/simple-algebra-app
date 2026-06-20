@@ -12,7 +12,7 @@
             --glass: rgba(255,255,255,0.07); --glass-border: rgba(255,255,255,0.12);
             --text-muted: #a8edea; --radius: 16px; --radius-lg: 24px;
         }
-        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         html { font-size:16px; }
         body {
             font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
@@ -26,74 +26,16 @@
         .screen-centred { align-items:center; justify-content:center; padding:clamp(16px,4vw,40px); }
         .screen-scroll  { align-items:center; overflow-y:auto; padding:clamp(12px,3vw,24px) clamp(12px,3vw,24px) 30px; -webkit-overflow-scrolling:touch; }
 
-        /* ── MATH FRACTION RENDERING ── */
-        .mfrac {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            vertical-align: middle;
-            margin: 0 3px;
-            font-size: 0.92em;
-        }
-        .mfrac .mnum {
-            border-bottom: 1.5px solid currentColor;
-            padding: 0 4px 2px;
-            text-align: center;
-            line-height: 1.3;
-        }
-        .mfrac .mden {
-            padding: 2px 4px 0;
-            text-align: center;
-            line-height: 1.3;
-        }
-
-        .math-expr {
-            display: inline-flex;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2px;
-            line-height: 2.2;
-            font-family: 'Segoe UI', Georgia, serif;
-        }
-
-        .mpow { font-size: 0.65em; vertical-align: super; }
-
-        .q-display {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-        }
-        .q-instruction {
-            font-size: clamp(0.78rem,2vw,0.92rem);
-            color: var(--text-muted);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-        .q-math {
-            font-size: clamp(1rem,3vw,1.35rem);
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 6px;
-            text-align: center;
-            line-height: 2.5;
-        }
-
-        .step-math {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 4px;
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            font-size: clamp(0.8rem,2vw,0.95rem);
-            color: #e8e8e8;
-        }
+        /* ── MATH RENDERING ── */
+        .mfrac { display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 3px; font-size:0.92em; }
+        .mfrac .mnum { border-bottom:1.5px solid currentColor; padding:0 4px 2px; text-align:center; line-height:1.3; }
+        .mfrac .mden { padding:2px 4px 0; text-align:center; line-height:1.3; }
+        .math-expr { display:inline-flex; align-items:center; flex-wrap:wrap; justify-content:center; gap:2px; line-height:2.2; font-family:'Segoe UI',Georgia,serif; }
+        .mpow { font-size:0.65em; vertical-align:super; }
+        .q-display { display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; }
+        .q-instruction { font-size:clamp(0.78rem,2vw,0.92rem); color:var(--text-muted); font-weight:600; letter-spacing:0.5px; }
+        .q-math { font-size:clamp(1rem,3vw,1.35rem); font-weight:700; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:6px; text-align:center; line-height:2.5; }
+        .step-math { display:flex; align-items:center; flex-wrap:wrap; gap:4px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:clamp(0.8rem,2vw,0.95rem); color:#e8e8e8; }
         .step-math:last-child { border-bottom:none; }
 
         /* ── TYPOGRAPHY ── */
@@ -132,6 +74,17 @@
             font-size:clamp(0.9rem,2.5vw,1.15rem);
             box-shadow:0 4px 18px rgba(67,233,123,0.4); width:100%; max-width:300px;
         }
+        .btn-gold {
+            background:linear-gradient(135deg,var(--gold),#fda085); color:#1a1a2e;
+            padding:clamp(12px,3vw,18px) clamp(24px,5vw,50px);
+            font-size:clamp(0.9rem,2.5vw,1.15rem);
+            box-shadow:0 4px 18px rgba(246,211,101,0.5); width:100%; max-width:300px;
+            border:none; border-radius:50px; font-weight:700; cursor:pointer;
+            display:inline-flex; align-items:center; justify-content:center; gap:8px;
+            transition:transform 0.18s,box-shadow 0.18s; touch-action:manipulation;
+        }
+        .btn-gold:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(246,211,101,0.7); }
+        .btn-gold:active { transform:scale(0.95); }
 
         /* ── GLASS CARD ── */
         .card {
@@ -194,7 +147,6 @@
 
         /* ── PRACTICE ── */
         .practice-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(10px,2vw,16px); width:100%; max-width:580px; }
-        @media(min-width:600px) { .practice-grid { grid-template-columns:repeat(3,1fr); } }
         .practice-tile {
             background:var(--glass); border:2px solid rgba(255,255,255,0.12);
             border-radius:var(--radius-lg); padding:clamp(16px,3vw,24px) clamp(10px,2vw,16px);
@@ -206,8 +158,8 @@
         .practice-tile .ico { font-size:clamp(1.6rem,4vw,2.2rem); display:block; margin-bottom:8px; }
 
         /* ── GAME SCREEN ── */
-        #gameScreen { justify-content:flex-start; padding-top:15px; overflow-y:auto; -webkit-overflow-scrolling:touch; }
-        .game-wrap { width:100%; max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:clamp(8px,1.8vw,13px); }
+        #gameScreen { justify-content:flex-start; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+        .game-wrap { width:100%; max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:clamp(8px,1.8vw,13px); padding:clamp(12px,3vw,20px) clamp(12px,3vw,20px) 30px; }
 
         .scoreboard {
             display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px;
@@ -257,6 +209,7 @@
         .pu-btn:disabled { opacity:0.3; cursor:not-allowed; }
         .pu-badge { background:rgba(246,211,101,0.28); border-radius:50%; min-width:18px; height:18px; display:inline-flex; align-items:center; justify-content:center; font-size:0.72rem; }
 
+        /* ── FLIP CARD ── */
         .flip-scene { width:100%; perspective:1000px; cursor:pointer; touch-action:manipulation; user-select:none; }
         .flip-card { width:100%; height:clamp(180px,30vw,260px); position:relative; transform-style:preserve-3d; transition:transform 0.65s cubic-bezier(0.4,0.2,0.2,1); }
         .flip-card.flipped { transform:rotateY(180deg); }
@@ -267,6 +220,7 @@
         .flip-hint { font-size:clamp(0.72rem,1.8vw,0.88rem); color:var(--text-muted); }
         .q-cat-label { font-size:clamp(0.6rem,1.5vw,0.75rem); color:var(--text-muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; font-weight:600; }
 
+        /* ── ANSWER CARD ── */
         .answer-card { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:var(--radius-lg); padding:clamp(14px,3vw,22px); display:flex; flex-direction:column; gap:clamp(9px,2vw,13px); }
         .answer-row { display:flex; gap:clamp(7px,1.5vw,11px); align-items:stretch; }
         .answer-input {
@@ -295,14 +249,7 @@
         .fb-wrong   { background:rgba(245,87,108,0.17); color:var(--danger); border:1px solid var(--danger); }
         .fb-timeout { background:rgba(253,160,133,0.17); color:#fda085; border:1px solid #fda085; }
 
-        .correct-ans-display {
-            display:none;
-            background:rgba(255,255,255,0.06);
-            border-radius:10px;
-            padding:10px 14px;
-            text-align:center;
-            font-size:clamp(0.82rem,2vw,0.98rem);
-        }
+        .correct-ans-display { display:none; background:rgba(255,255,255,0.06); border-radius:10px; padding:10px 14px; text-align:center; font-size:clamp(0.82rem,2vw,0.98rem); }
         .correct-ans-display.show { display:block; }
         .correct-ans-label { color:var(--text-muted); font-size:0.8em; margin-bottom:6px; }
         .correct-ans-math { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:4px; font-weight:700; font-size:1.1em; }
@@ -321,9 +268,9 @@
         .stat-val { font-size:clamp(1rem,2.8vw,1.4rem); font-weight:800; }
         .stat-lbl { font-size:clamp(0.58rem,1.4vw,0.7rem); color:var(--text-muted); margin-top:2px; }
 
-        /* ── WINNER ── */
-        .winner-wrap { width:100%; max-width:540px; text-align:center; }
-        .trophy-anim { font-size:clamp(3.5rem,10vw,5.5rem); animation:float 2s ease-in-out infinite; }
+        /* ── WINNER SCREEN ── */
+        .winner-wrap { width:100%; max-width:600px; text-align:center; }
+        .trophy-anim { font-size:clamp(3.5rem,10vw,5.5rem); animation:float 2s ease-in-out infinite; display:block; }
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
         .winner-label { font-size:clamp(0.7rem,2vw,0.9rem); color:var(--text-muted); margin-top:8px; letter-spacing:2px; }
         .winner-name-text { font-size:clamp(1.5rem,5.5vw,2.5rem); font-weight:900; background:linear-gradient(90deg,var(--gold),#fda085); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin:10px 0; }
@@ -332,8 +279,136 @@
         .fs-name { font-size:clamp(0.72rem,1.8vw,0.88rem); color:var(--text-muted); }
         .fs-val { font-size:clamp(1.8rem,5.5vw,2.5rem); font-weight:900; }
         .winner-actions { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:clamp(14px,3vw,22px); }
-        .winner-actions .btn-primary, .winner-actions .btn-danger { max-width:180px; padding:12px 20px; }
+        .winner-actions .btn { max-width:200px; padding:12px 20px; font-size:0.95rem; }
 
+        /* ── CARD FLIP GAME (Winner Screen) ── */
+        .card-game-section {
+            margin-top: clamp(16px,3vw,28px);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: var(--radius-lg);
+            padding: clamp(16px,3vw,28px);
+        }
+        .card-game-title {
+            font-size: clamp(1rem,3vw,1.4rem);
+            font-weight: 900;
+            color: var(--gold);
+            margin-bottom: 6px;
+        }
+        .card-game-subtitle {
+            font-size: clamp(0.7rem,1.8vw,0.85rem);
+            color: var(--text-muted);
+            margin-bottom: clamp(10px,2vw,16px);
+            line-height: 1.6;
+        }
+        .cg-tokens-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(246,211,101,0.12);
+            border: 1px solid rgba(246,211,101,0.35);
+            border-radius: 30px;
+            padding: 7px 18px;
+            font-size: clamp(0.85rem,2.2vw,1.05rem);
+            font-weight: 800;
+            color: var(--gold);
+            margin-bottom: clamp(10px,2vw,16px);
+        }
+        .cg-bet-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: clamp(10px,2vw,16px);
+        }
+        .cg-bet-label { font-size:clamp(0.78rem,2vw,0.9rem); color:var(--text-muted); font-weight:600; }
+        .cg-bet-pills { display:flex; gap:7px; flex-wrap:wrap; justify-content:center; }
+        .cg-bet-pill {
+            padding: 7px 15px; border-radius:20px;
+            background: rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.16);
+            color:rgba(255,255,255,0.75); cursor:pointer; font-size:clamp(0.75rem,2vw,0.9rem);
+            font-weight:700; transition:all 0.2s; touch-action:manipulation;
+        }
+        .cg-bet-pill.on { background:linear-gradient(135deg,var(--gold),#fda085); border-color:var(--gold); color:#1a1a2e; }
+
+        /* The 6 face-down playing cards */
+        .cg-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: clamp(8px,2vw,14px);
+            max-width: 420px;
+            margin: 0 auto clamp(12px,2.5vw,20px);
+        }
+        @media(min-width:480px){ .cg-cards-grid { grid-template-columns:repeat(6,1fr); } }
+
+        .cg-card {
+            aspect-ratio: 2/3;
+            perspective: 600px;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        .cg-card-inner {
+            width:100%; height:100%;
+            position:relative; transform-style:preserve-3d;
+            transition:transform 0.55s cubic-bezier(0.4,0.2,0.2,1);
+            border-radius:12px;
+        }
+        .cg-card.revealed .cg-card-inner { transform:rotateY(180deg); }
+        .cg-card-face {
+            position:absolute; inset:0;
+            backface-visibility:hidden; -webkit-backface-visibility:hidden;
+            border-radius:12px;
+            display:flex; flex-direction:column;
+            align-items:center; justify-content:center;
+            font-size:clamp(1.2rem,3.5vw,1.8rem);
+            font-weight:900; border:2px solid;
+            transition: box-shadow 0.3s;
+        }
+        .cg-card-back {
+            background: linear-gradient(135deg,#302b63,#667eea);
+            border-color: rgba(102,126,234,0.6);
+            color: white;
+            font-size: clamp(1.4rem,4vw,2.2rem);
+        }
+        .cg-card-back::before { content:'🎴'; }
+        .cg-card-front { transform:rotateY(180deg); }
+
+        /* Card result colours */
+        .cg-card-front.prize-jackpot  { background:linear-gradient(135deg,#f6d365,#fda085); border-color:var(--gold);    color:#1a1a2e; }
+        .cg-card-front.prize-big      { background:linear-gradient(135deg,#43e97b,#38f9d7); border-color:var(--accent);  color:#1a1a2e; }
+        .cg-card-front.prize-medium   { background:linear-gradient(135deg,#667eea,#764ba2); border-color:var(--primary); color:white;   }
+        .cg-card-front.prize-small    { background:linear-gradient(135deg,#302b63,#24243e); border-color:rgba(255,255,255,0.3); color:white; }
+        .cg-card-front.prize-lose     { background:linear-gradient(135deg,#f5576c,#c0392b); border-color:var(--danger);  color:white;   }
+        .cg-card-front.prize-double   { background:linear-gradient(135deg,#f093fb,#f5576c); border-color:var(--secondary); color:white; }
+
+        .cg-card-label { font-size:clamp(0.5rem,1.4vw,0.68rem); font-weight:700; margin-top:3px; text-align:center; line-height:1.3; }
+
+        .cg-result-banner {
+            display:none;
+            background:rgba(255,255,255,0.07);
+            border:1px solid rgba(255,255,255,0.15);
+            border-radius:14px;
+            padding:clamp(10px,2vw,16px);
+            margin-bottom:12px;
+            font-size:clamp(0.85rem,2.2vw,1.05rem);
+            font-weight:700;
+            animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .cg-result-banner.show { display:block; }
+
+        .cg-history {
+            display:flex; flex-wrap:wrap; gap:5px; justify-content:center;
+            margin-top:8px; min-height:24px;
+        }
+        .cg-hist-chip {
+            padding:3px 9px; border-radius:20px; font-size:0.7rem; font-weight:700;
+        }
+        .chip-win  { background:rgba(67,233,123,0.2);  color:var(--accent);    border:1px solid var(--accent); }
+        .chip-lose { background:rgba(245,87,108,0.2);  color:var(--danger);    border:1px solid var(--danger); }
+        .chip-push { background:rgba(246,211,101,0.2); color:var(--gold);      border:1px solid var(--gold);   }
+
+        /* ── SHARED POPUP ── */
         .popup-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.78); display:none; align-items:center; justify-content:center; z-index:900; backdrop-filter:blur(4px); padding:20px; }
         .popup-overlay.show { display:flex; }
         .popup-box { background:linear-gradient(135deg,#302b63,var(--bg3)); border-radius:var(--radius-lg); padding:clamp(24px,5vw,40px) clamp(20px,4vw,38px); max-width:400px; width:100%; text-align:center; border:2px solid rgba(255,255,255,0.13); animation:popIn 0.38s cubic-bezier(0.34,1.56,0.64,1); }
@@ -345,16 +420,16 @@
         .confetti-piece { position:fixed; top:-12px; border-radius:3px; animation:cfFall linear forwards; pointer-events:none; z-index:9999; }
         @keyframes cfFall { 0%{transform:translateY(0) rotate(0deg) translateX(0);opacity:1} 100%{transform:translateY(105vh) rotate(600deg) translateX(var(--dx,0px));opacity:0} }
 
+        .divider { height:1px; background:rgba(255,255,255,0.08); }
+
         @media(min-width:600px) { .practice-grid { grid-template-columns:repeat(3,1fr); } }
         @media(min-width:768px) { .cat-grid { grid-template-columns:repeat(3,1fr); } }
-        @media(max-height:500px) and (orientation:landscape) { .flip-card { height:130px; } .flip-icon { font-size:1.5rem; } }
-
-        .divider { height:1px; background:rgba(255,255,255,0.08); }
+        @media(max-height:500px) and (orientation:landscape) { .flip-card{height:130px;} .flip-icon{font-size:1.5rem;} }
     </style>
 </head>
 <body>
 
-<!-- HOME -->
+<!-- ═══════════ HOME ═══════════ -->
 <div id="homeScreen" class="screen screen-centred active">
     <div class="home-inner">
         <div class="title-glow">⚔️ Algebra Battle</div>
@@ -374,7 +449,7 @@
     </div>
 </div>
 
-<!-- SETUP -->
+<!-- ═══════════ SETUP ═══════════ -->
 <div id="setupScreen" class="screen screen-scroll">
 <div class="setup-wrap"><div class="card" style="margin:auto">
     <div class="setup-title">⚙️ Game Setup</div>
@@ -417,8 +492,10 @@
         </div>
         <div class="bonus-info-box">
             ⚡ <strong>Speed Bonus — answer quickly for multiplied points!</strong><br>
-            🔥 First 25% of time → <strong>×3 pts</strong> &nbsp;|&nbsp; ⚡ First 50% → <strong>×2 pts</strong><br>
-            ⭐ First 75% → <strong>×1.5 pts</strong> &nbsp;|&nbsp; 🐢 After 75% → <strong>×1 base pts</strong>
+            🔥 First 25% of time → <strong>×3 pts</strong> &nbsp;|&nbsp;
+            ⚡ First 50% → <strong>×2 pts</strong><br>
+            ⭐ First 75% → <strong>×1.5 pts</strong> &nbsp;|&nbsp;
+            🐢 After 75% → <strong>×1 base pts</strong>
         </div>
     </div>
     <div class="setup-actions">
@@ -428,7 +505,7 @@
 </div></div>
 </div>
 
-<!-- PRACTICE -->
+<!-- ═══════════ PRACTICE ═══════════ -->
 <div id="practiceScreen" class="screen screen-centred">
     <div style="text-align:center;margin-bottom:clamp(10px,3vw,20px)">
         <div style="font-size:clamp(1.3rem,4.5vw,2rem);font-weight:900;color:var(--gold)">📚 Practice Mode</div>
@@ -445,10 +522,11 @@
     <button class="btn btn-danger" style="margin-top:clamp(14px,3vw,24px);max-width:200px;border-radius:14px;padding:12px 20px;font-size:0.95rem" onclick="showHome()">← Back</button>
 </div>
 
-<!-- GAME -->
+<!-- ═══════════ GAME ═══════════ -->
 <div id="gameScreen" class="screen">
-<div class="game-wrap" style="padding:clamp(12px,3vw,20px) clamp(12px,3vw,20px) 30px">
+<div class="game-wrap">
 
+    <!-- Scoreboard -->
     <div class="scoreboard">
         <div class="score-panel">
             <div class="score-name" id="g_p1name">P1</div>
@@ -466,11 +544,13 @@
         </div>
     </div>
 
+    <!-- Timer bar -->
     <div>
         <div class="timer-track"><div class="timer-fill" id="g_timerBar"></div></div>
         <div class="timer-labels"><span>🔥×3</span><span>⚡×2</span><span>⭐×1.5</span><span>🐢×1</span></div>
     </div>
 
+    <!-- Bonus zones -->
     <div class="bz-row">
         <div class="bz bz-hot  active" id="bz0">🔥 BLAZING<br>×3 pts</div>
         <div class="bz bz-warm"        id="bz1">⚡ FAST<br>×2 pts</div>
@@ -478,12 +558,14 @@
         <div class="bz bz-base"        id="bz3">🐢 BASE<br>×1 pt</div>
     </div>
 
+    <!-- Meta row -->
     <div class="game-meta">
         <div class="round-label" id="g_roundLbl">Round 1/10</div>
         <div class="cat-chip"    id="g_catChip">Topic</div>
         <div class="pts-label"   id="g_ptsLbl">+10 pts</div>
     </div>
 
+    <!-- Power-ups -->
     <div class="pu-row">
         <button class="pu-btn" id="puHint"   onclick="useHintPU()">💡 Hint <span class="pu-badge" id="puHintN">2</span></button>
         <button class="pu-btn" id="puSkip"   onclick="useSkipPU()">⏭ Skip <span class="pu-badge" id="puSkipN">2</span></button>
@@ -514,27 +596,21 @@
                 autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                 onkeydown="handleKey(event)" oninput="liveCheck()">
             <button class="btn-submit" id="g_submitBtn" onclick="submitAnswer()">✓ Check</button>
-            <button class="btn-skip" onclick="skipQuestion()">Skip</button>
+            <button class="btn-skip"   onclick="skipQuestion()">Skip</button>
         </div>
-
         <div class="format-hint-text" id="g_fmtHint"></div>
         <div class="feedback" id="g_feedback"></div>
-
         <div class="correct-ans-display" id="g_correctAns">
             <div class="correct-ans-label">✅ Correct Answer:</div>
             <div class="correct-ans-math" id="g_correctAnsMath"></div>
         </div>
-
         <div class="steps-box" id="g_steps">
             <div class="steps-title">📖 Step-by-step Solution</div>
             <div id="g_stepsBody"></div>
         </div>
-
         <button class="hint-toggle-btn" onclick="useHintPU()">💡 Show Hint</button>
         <div class="hint-box" id="g_hintBox"></div>
-
         <div class="divider"></div>
-
         <div class="stats-row">
             <div class="stat-box"><div class="stat-val" id="st_correct">0</div><div class="stat-lbl">✅ Correct</div></div>
             <div class="stat-box"><div class="stat-val" id="st_wrong">0</div><div class="stat-lbl">❌ Wrong</div></div>
@@ -543,28 +619,91 @@
         </div>
     </div>
 
-</div>
-</div>
+</div><!-- /.game-wrap -->
+</div><!-- /#gameScreen -->
 
-<!-- WINNER -->
-<div id="winnerScreen" class="screen screen-centred">
-<div class="card winner-wrap">
+<!-- ═══════════ WINNER ═══════════ -->
+<div id="winnerScreen" class="screen screen-scroll">
+<div class="card winner-wrap" style="margin:auto">
+
     <div class="trophy-anim" id="w_trophy">🏆</div>
     <div class="winner-label">WINNER</div>
     <div class="winner-name-text" id="w_name">—</div>
-    <div class="final-score-row">
-        <div class="fs-item"><div class="fs-name" id="w_p1name">P1</div><div class="fs-val score-p1" id="w_p1score">0</div><div style="font-size:0.75rem;color:var(--text-muted)">pts</div></div>
-        <div style="font-size:clamp(1rem,3vw,1.6rem);color:rgba(255,255,255,0.25)">VS</div>
-        <div class="fs-item"><div class="fs-name" id="w_p2name">P2</div><div class="fs-val score-p2" id="w_p2score">0</div><div style="font-size:0.75rem;color:var(--text-muted)">pts</div></div>
-    </div>
-    <div class="final-stats-text" id="w_stats" style="color:var(--text-muted);font-size:clamp(0.72rem,1.8vw,0.88rem);line-height:2"></div>
-    <div class="winner-actions">
-        <button class="btn btn-primary" onclick="replayGame()">🔄 Play Again</button>
-        <button class="btn btn-danger"  onclick="showHome()">🏠 Home</button>
-    </div>
-</div>
-</div>
 
+    <div class="final-score-row">
+        <div class="fs-item">
+            <div class="fs-name" id="w_p1name">P1</div>
+            <div class="fs-val score-p1" id="w_p1score">0</div>
+            <div style="font-size:0.75rem;color:var(--text-muted)">pts</div>
+        </div>
+        <div style="font-size:clamp(1rem,3vw,1.6rem);color:rgba(255,255,255,0.25)">VS</div>
+        <div class="fs-item">
+            <div class="fs-name" id="w_p2name">P2</div>
+            <div class="fs-val score-p2" id="w_p2score">0</div>
+            <div style="font-size:0.75rem;color:var(--text-muted)">pts</div>
+        </div>
+    </div>
+
+    <div id="w_stats" style="color:var(--text-muted);font-size:clamp(0.72rem,1.8vw,0.88rem);line-height:2;margin-bottom:10px"></div>
+
+    <!-- ════ CARD FLIP BONUS GAME ════ -->
+    <div class="card-game-section" id="cardGameSection">
+        <div class="card-game-title">🃏 Bonus Card Flip!</div>
+        <div class="card-game-subtitle">
+            Spend your points to flip cards — win big or lose it all!<br>
+            Each flip costs <strong style="color:var(--gold)">tokens</strong> (10 pts = 1 token). 
+            Pick a bet, then flip a card.
+        </div>
+
+        <div class="cg-tokens-display">
+            🪙 <span id="cg_tokens">0</span> tokens
+            &nbsp;·&nbsp;
+            💰 <span id="cg_pts">0</span> pts equivalent
+        </div>
+
+        <!-- Bet selector -->
+        <div class="cg-bet-row">
+            <span class="cg-bet-label">Bet:</span>
+            <div class="cg-bet-pills" id="cgBetPills">
+                <div class="cg-bet-pill on" data-bet="1">1 🪙</div>
+                <div class="cg-bet-pill"    data-bet="2">2 🪙</div>
+                <div class="cg-bet-pill"    data-bet="5">5 🪙</div>
+                <div class="cg-bet-pill"    data-bet="10">10 🪙</div>
+            </div>
+        </div>
+
+        <!-- 6 face-down cards -->
+        <div class="cg-cards-grid" id="cgCardsGrid">
+            <!-- generated by JS -->
+        </div>
+
+        <!-- Result banner -->
+        <div class="cg-result-banner" id="cgResultBanner"></div>
+
+        <!-- History chips -->
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px">Round history:</div>
+        <div class="cg-history" id="cgHistory"></div>
+
+        <!-- Deal again button -->
+        <div style="margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <button class="btn-gold" id="cgDealBtn" onclick="cgDealNewRound()" style="max-width:180px;font-size:0.95rem;padding:11px 20px;border-radius:14px">
+                🔀 New Round
+            </button>
+            <button class="btn btn-danger" onclick="showHome()" style="max-width:180px;padding:11px 20px;font-size:0.95rem;border-radius:14px">
+                🏠 Home
+            </button>
+        </div>
+    </div>
+    <!-- ════ END CARD FLIP GAME ════ -->
+
+    <div class="winner-actions" style="margin-top:14px">
+        <button class="btn btn-primary" onclick="replayGame()">🔄 Play Again</button>
+    </div>
+
+</div><!-- /.card.winner-wrap -->
+</div><!-- /#winnerScreen -->
+
+<!-- ═══════════ POPUP ═══════════ -->
 <div class="popup-overlay" id="popupOverlay">
 <div class="popup-box">
     <div style="font-size:3.5em;margin-bottom:10px" id="popup_icon">🎉</div>
@@ -576,253 +715,169 @@
 
 <div class="bonus-toast" id="bonusToast"></div>
 
+<!-- ═══════════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════════ -->
 <script>
 'use strict';
 
-/* ═══════════════════════════════════════════════════════
-   MATH RENDERER  —  fixed: superscripts & fractions
-   ═══════════════════════════════════════════════════════ */
+/* ─── DOM helpers ─── */
+const $  = id  => document.getElementById(id);
+const $1 = sel => document.querySelector(sel);
+const $$ = sel => document.querySelectorAll(sel);
 
-/**
- * Render a math expression string to HTML.
- * Supports:
- *   x^2  → x<sup>2</sup>
- *   a/b  → stacked fraction (a over b)
- *   (expr)/(expr) → stacked fraction
- *   (expr)/simple → stacked fraction
- *   simple/(expr) → stacked fraction
- */
+/* ═══════════════════════════════════════════════════════
+   MATH RENDERER
+═══════════════════════════════════════════════════════ */
 function renderMath(text) {
     if (!text) return '';
+    let s = String(text);
 
-    // 1) Escape HTML special characters so user text is safe,
-    //    but we'll generate our own <sup> and <span> tags.
-    let s = escapeHTML(text);
-
-    // 2) Convert superscripts: x^2 → x<sup>2</sup>
-    //    Also handle unicode ² ³
+    // Superscripts
     s = s.replace(/\^(\d+)/g, '<sup>$1</sup>')
          .replace(/²/g, '<sup>2</sup>')
          .replace(/³/g, '<sup>3</sup>');
 
-    // 3) Convert fractions: a/b or (expr)/(expr)
-    //    We use a simple regex-based approach that won't interfere with <sup>.
-    //    We'll find patterns like: (expr)/(expr) or simple/simple
-    //    But we must not match inside HTML tags (e.g. <sup>2</sup> has no slash).
-    //    We'll process the string left-to-right, looking for '/'
-    //    and checking if the left and right sides are valid fraction parts.
-
-    let result = '';
-    let i = 0;
+    // Fractions — left-to-right scan
+    let result = '', i = 0;
     while (i < s.length) {
-        // Look for a '/' character
-        let slashIdx = s.indexOf('/', i);
-        if (slashIdx === -1) {
-            result += s.slice(i);
-            break;
-        }
+        const slashIdx = s.indexOf('/', i);
+        if (slashIdx === -1) { result += s.slice(i); break; }
 
-        // Check if this '/' is part of a fraction.
-        // We need to find the numerator (before '/') and denominator (after '/').
-        // The numerator can be:
-        //   - a token: letters, digits, +, -, *, spaces, and <sup> tags
-        //   - a parenthesized expression: ( ... )
-        // The denominator can be:
-        //   - a token
-        //   - a parenthesized expression: ( ... )
-
-        // Get the numerator: scan left from slashIdx-1
+        // Find numerator
         let numStart = slashIdx - 1;
-        let numEnd = slashIdx;
-
-        // Skip whitespace
         while (numStart >= 0 && s[numStart] === ' ') numStart--;
 
-        // Check if numerator is a parenthesized expression
         let numIsParen = false;
         if (numStart >= 0 && s[numStart] === ')') {
-            // Find matching '('
-            let depth = 0;
-            let openIdx = -1;
+            let depth = 0, openIdx = -1;
             for (let j = numStart; j >= 0; j--) {
                 if (s[j] === ')') depth++;
-                else if (s[j] === '(') { depth--; if (depth === 0) { openIdx = j; break; } }
+                else if (s[j] === '(') { if (--depth === 0) { openIdx = j; break; } }
             }
-            if (openIdx !== -1) {
-                numStart = openIdx;
-                numIsParen = true;
-            }
+            if (openIdx !== -1) { numStart = openIdx; numIsParen = true; }
         } else {
-            // Not parenthesized: find the start of the token
-            // Token chars: letters, digits, +, -, *, ., <, > (for tags)
-            while (numStart >= 0) {
-                const ch = s[numStart];
-                // Allow letters, digits, +, -, *, ., <, >, =, space
-                if (/[a-zA-Z0-9+\-*\.<>= ]/.test(ch)) {
-                    numStart--;
-                } else {
-                    break;
-                }
-            }
+            while (numStart >= 0 && /[a-zA-Z0-9+\-*.<>= ]/.test(s[numStart])) numStart--;
             numStart++;
         }
+        const numText = s.slice(numStart, slashIdx).trim();
 
-        // Get the numerator text
-        let numText = s.slice(numStart, slashIdx).trim();
-
-        // Get the denominator: scan right from slashIdx+1
+        // Find denominator
         let denStart = slashIdx + 1;
         while (denStart < s.length && s[denStart] === ' ') denStart++;
-
-        let denEnd = denStart;
-        let denIsParen = false;
+        let denEnd = denStart, denIsParen = false;
         if (denStart < s.length && s[denStart] === '(') {
-            // Find matching ')'
-            let depth = 0;
-            let closeIdx = -1;
+            let depth = 0, closeIdx = -1;
             for (let j = denStart; j < s.length; j++) {
                 if (s[j] === '(') depth++;
-                else if (s[j] === ')') { depth--; if (depth === 0) { closeIdx = j; break; } }
+                else if (s[j] === ')') { if (--depth === 0) { closeIdx = j; break; } }
             }
-            if (closeIdx !== -1) {
-                denEnd = closeIdx + 1;
-                denIsParen = true;
-            }
+            if (closeIdx !== -1) { denEnd = closeIdx + 1; denIsParen = true; }
         }
-
         if (!denIsParen) {
-            // Not parenthesized: grab a token
             let j = denStart;
-            while (j < s.length) {
-                const ch = s[j];
-                if (/[a-zA-Z0-9+\-*\.<>= ]/.test(ch)) {
-                    j++;
-                } else {
-                    break;
-                }
-            }
+            while (j < s.length && /[a-zA-Z0-9+\-*.<>= ]/.test(s[j])) j++;
             denEnd = j;
         }
+        const denText = s.slice(denStart, denEnd).trim();
 
-        let denText = s.slice(denStart, denEnd).trim();
-
-        // Validate: both numerator and denominator must be non-empty
         if (numText && denText) {
-            // Build the fraction HTML
-            // But we must avoid matching inside HTML tags like <sup>2</sup> — but that has no '/'
-            // Also avoid matching things like "http://" — but that won't happen in math expressions
-            // We also need to ensure the numerator and denominator don't contain unbalanced brackets
-
-            // Build fraction
             result += s.slice(i, numStart);
-            result += buildFracHTML(numText, denText);
+            result += `<span class="mfrac"><span class="mnum">${renderMath(numText)}</span><span class="mden">${renderMath(denText)}</span></span>`;
             i = denEnd;
         } else {
-            // Not a valid fraction, just add the '/' and continue
             result += s.slice(i, slashIdx + 1);
             i = slashIdx + 1;
         }
     }
-
     return result;
 }
 
-/** Build a stacked fraction HTML */
-function buildFracHTML(num, den) {
-    // Recurse to handle nested fractions (num or den may contain '/')
-    const nHTML = renderMath(num);
-    const dHTML = renderMath(den);
-    return `<span class="mfrac"><span class="mnum">${nHTML}</span><span class="mden">${dHTML}</span></span>`;
-}
-
-/** Simple HTML escaping (only &, <, >) */
 function escapeHTML(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-/**
- * Render a full question: instruction + math expression
- * qText format: "Instruction text\nmath expression"
- */
 function renderQuestion(qText) {
-    const lines = qText.split('\n');
+    const lines = String(qText).split('\n');
     const instruction = lines[0] || '';
     const expr = lines.slice(1).join(' ');
-
     let html = '';
-    if (instruction) {
-        html += `<div class="q-instruction">${escapeHTML(instruction)}</div>`;
-    }
-    if (expr) {
-        html += `<div class="q-math">${renderMath(expr)}</div>`;
-    }
+    if (instruction) html += `<div class="q-instruction">${escapeHTML(instruction)}</div>`;
+    if (expr)        html += `<div class="q-math">${renderMath(expr)}</div>`;
     return html;
 }
 
-/**
- * Render a step (can contain math expressions)
- */
 function renderStep(stepText) {
     return `<div class="step-math">${renderMath(stepText)}</div>`;
 }
 
 /* ═══════════════════════════════════════════════════════
-   ANSWER CHECKER  (smart, order-independent)
+   ANSWER CHECKER
 ═══════════════════════════════════════════════════════ */
 function norm(raw) {
-    return String(raw ?? '')
-        .toLowerCase().replace(/\s+/g,'')
+    return String(raw ?? '').toLowerCase()
+        .replace(/\s+/g,'')
         .replace(/[−–]/g,'-').replace(/×/g,'*').replace(/÷/g,'/').replace(/\*\*/g,'^')
         .replace(/--/g,'+').replace(/\+-/g,'-').replace(/-\+/g,'-');
 }
 function sortFactors(s) {
     if (!s.includes('(')) return s;
     const leadM = s.match(/^(-?\d*\/?\d*(?:\.\d+)?)\(/);
-    let lead='',rest=s;
-    if (leadM&&leadM[1]){lead=leadM[1];rest=s.slice(lead.length);}
-    const factors=[]; let depth=0,buf='';
-    for(const ch of rest){
-        if(ch==='(')depth++; if(ch===')')depth--;
-        buf+=ch; if(depth===0&&buf){factors.push(buf);buf='';}
+    let lead = '', rest = s;
+    if (leadM && leadM[1]) { lead = leadM[1]; rest = s.slice(lead.length); }
+    const factors = []; let depth = 0, buf = '';
+    for (const ch of rest) {
+        if (ch === '(') depth++;
+        if (ch === ')') depth--;
+        buf += ch;
+        if (depth === 0 && buf) { factors.push(buf); buf = ''; }
     }
-    factors.sort(); return lead+factors.join('');
+    factors.sort();
+    return lead + factors.join('');
 }
-function termVariants(s){
-    const parts=[]; let buf='';
-    for(let i=0;i<s.length;i++){
-        const ch=s[i];
-        if((ch==='+'||ch==='-')&&i>0&&s[i-1]!=='^'){if(buf)parts.push(buf);buf=ch;}
-        else buf+=ch;
+function termVariants(s) {
+    const parts = []; let buf = '';
+    for (let i = 0; i < s.length; i++) {
+        const ch = s[i];
+        if ((ch === '+' || ch === '-') && i > 0 && s[i-1] !== '^') { if (buf) parts.push(buf); buf = ch; }
+        else buf += ch;
     }
-    if(buf)parts.push(buf);
-    if(parts.length<=1)return[s];
-    return perms(parts).map(p=>{let r=p[0];for(let i=1;i<p.length;i++)r+=(p[i][0]==='-'?'':'+')+ p[i];return r.replace(/^\+/,'');});
+    if (buf) parts.push(buf);
+    if (parts.length <= 1) return [s];
+    return perms(parts).map(p => {
+        let r = p[0];
+        for (let i = 1; i < p.length; i++) r += (p[i][0] === '-' ? '' : '+') + p[i];
+        return r.replace(/^\+/,'');
+    });
 }
-function perms(a){
-    if(a.length<=1)return[a];
-    const out=[];
-    a.forEach((el,i)=>perms([...a.slice(0,i),...a.slice(i+1)]).forEach(p=>out.push([el,...p])));
+function perms(a) {
+    if (a.length <= 1) return [a];
+    const out = [];
+    a.forEach((el,i) => perms([...a.slice(0,i),...a.slice(i+1)]).forEach(p => out.push([el,...p])));
     return out;
 }
-function fracEqual(a,b){
-    const fr=/^(-?\d+)\/(\d+)$/;
-    const ma=a.match(fr),mb=b.match(fr);
-    if(ma&&mb)return+ma[1]*+mb[2]===+mb[1]*+ma[2];
-    const toN=s=>{const m=s.match(fr);return m?+m[1]/+m[2]:parseFloat(s);};
-    const na=toN(a),nb=toN(b);
-    return!isNaN(na)&&!isNaN(nb)&&Math.abs(na-nb)<1e-6;
+function fracEqual(a, b) {
+    const fr = /^(-?\d+)\/(\d+)$/;
+    const ma = a.match(fr), mb = b.match(fr);
+    if (ma && mb) return +ma[1] * +mb[2] === +mb[1] * +ma[2];
+    const toN = s => { const m = s.match(fr); return m ? +m[1]/+m[2] : parseFloat(s); };
+    const na = toN(a), nb = toN(b);
+    return !isNaN(na) && !isNaN(nb) && Math.abs(na - nb) < 1e-6;
 }
-function numEqual(a,b){const na=parseFloat(a),nb=parseFloat(b);return!isNaN(na)&&!isNaN(nb)&&Math.abs(na-nb)<1e-6;}
-function checkAnswer(userRaw,acceptedRaw){
-    const u=norm(userRaw);
-    for(const raw of String(acceptedRaw).split('|')){
-        const a=norm(raw.trim());
-        if(u===a)return true;
-        if(sortFactors(u)===sortFactors(a))return true;
-        if(fracEqual(u,a))return true;
-        if(numEqual(u,a))return true;
-        for(const uv of termVariants(u)){if(uv===a||sortFactors(uv)===sortFactors(a))return true;}
-        for(const av of termVariants(a)){if(av===u||sortFactors(av)===sortFactors(u))return true;}
+function numEqual(a, b) {
+    const na = parseFloat(a), nb = parseFloat(b);
+    return !isNaN(na) && !isNaN(nb) && Math.abs(na - nb) < 1e-6;
+}
+function checkAnswer(userRaw, acceptedRaw) {
+    const u = norm(userRaw);
+    for (const raw of String(acceptedRaw).split('|')) {
+        const a = norm(raw.trim());
+        if (u === a) return true;
+        if (sortFactors(u) === sortFactors(a)) return true;
+        if (fracEqual(u, a)) return true;
+        if (numEqual(u, a)) return true;
+        for (const uv of termVariants(u)) { if (uv === a || sortFactors(uv) === sortFactors(a)) return true; }
+        for (const av of termVariants(a)) { if (av === u || sortFactors(av) === sortFactors(u)) return true; }
     }
     return false;
 }
@@ -886,7 +941,7 @@ const QB = {
         {q:"Single fraction:\n2/(x−1) − 1/(x−1)", a:"1/(x-1)",                                          hint:"Same denominator — subtract numerators.",         steps:["= (2−1)/(x−1)","= 1/(x−1)"],                          pts:10},
         {q:"Simplify:\n(2x + 6)/(x + 3)",         a:"2",                                                hint:"Factorise numerator: 2(x+3).",                   steps:["= 2(x+3)/(x+3)","= 2"],                               pts:14},
         {q:"Simplify:\n(x^2 − 9)/(x − 3)",        a:"x+3",                                              hint:"x²−9 = (x+3)(x−3).",                            steps:["= (x+3)(x−3)/(x−3)","= x + 3"],                       pts:16},
-        {q:"Single fraction:\n3/(x+2) + 2/(x−1)", a:"(5x+1)/((x+2)(x-1))|(5x+1)/((x-1)(x+2))",        hint:"LCD = (x+2)(x−1). Cross-multiply numerators.",   steps:["= [3(x−1) + 2(x+2)] / [(x+2)(x−1)]","= (5x+1)/((x+2)(x−1))"],  pts:20},
+        {q:"Single fraction:\n3/(x+2) + 2/(x−1)", a:"(5x+1)/((x+2)(x-1))|(5x+1)/((x-1)(x+2))",        hint:"LCD = (x+2)(x−1). Cross-multiply numerators.",   steps:["= [3(x−1) + 2(x+2)] / [(x+2)(x−1)]","= (5x+1)/((x+2)(x−1))"], pts:20},
     ],
     fracop:[
         {q:"Simplify:\n(x/3) × (6/x)",                   a:"2",          hint:"Multiply across then cancel.",                    steps:["= 6x/(3x) = 2"],                                   pts:14},
@@ -938,6 +993,7 @@ const FMT_HINTS = {
    GAME STATE
 ═══════════════════════════════════════════════════════ */
 let G = {}, SAVED = {};
+
 function blankState() {
     return {
         mode:'battle', p1Name:'Player 1', p2Name:'Player 2',
@@ -954,52 +1010,56 @@ function blankState() {
    NAVIGATION
 ═══════════════════════════════════════════════════════ */
 function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    window.scrollTo(0,0);
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    $(id).classList.add('active');
+    window.scrollTo(0, 0);
 }
 function showHome()     { clearInterval(G.timer); showScreen('homeScreen'); }
 function showPractice() { showScreen('practiceScreen'); }
 function showSetup(mode) {
     SAVED.mode = mode;
-    document.getElementById('p2Group').style.display = mode==='battle'?'block':'none';
-    document.querySelectorAll('.cat-toggle').forEach(b=>b.classList.add('on'));
-    setPills('#roundPills','10'); setPills('#timePills','120');
+    $('p2Group').style.display = mode === 'battle' ? 'block' : 'none';
+    $$('.cat-toggle').forEach(b => b.classList.add('on'));
+    setPills('#roundPills','10');
+    setPills('#timePills','120');
     showScreen('setupScreen');
 }
-function setPills(sel,val) { document.querySelectorAll(sel+' .pill').forEach(p=>p.classList.toggle('on',p.dataset.val===val)); }
+function setPills(sel, val) {
+    $$(sel + ' .pill').forEach(p => p.classList.toggle('on', p.dataset.val === val));
+}
 
-document.querySelectorAll('.cat-toggle').forEach(b=>b.addEventListener('click',()=>b.classList.toggle('on')));
-document.querySelectorAll('#roundPills .pill').forEach(b=>b.addEventListener('click',()=>{setPills('#roundPills','');b.classList.add('on');}));
-document.querySelectorAll('#timePills .pill').forEach(b=>b.addEventListener('click',()=>{setPills('#timePills','');b.classList.add('on');}));
+// Setup event listeners
+$$('.cat-toggle').forEach(b => b.addEventListener('click', () => b.classList.toggle('on')));
+$$('#roundPills .pill').forEach(b => b.addEventListener('click', () => { setPills('#roundPills',''); b.classList.add('on'); }));
+$$('#timePills  .pill').forEach(b => b.addEventListener('click', () => { setPills('#timePills','');  b.classList.add('on'); }));
 
 /* ═══════════════════════════════════════════════════════
    START / REPLAY
 ═══════════════════════════════════════════════════════ */
 function startGame() {
-    const cats=[...$all('.cat-toggle.on')].map(b=>b.dataset.cat);
-    if(!cats.length){alert('Please select at least one topic!');return;}
-    const rp=$1('#roundPills .pill.on'), tp=$1('#timePills .pill.on');
+    const cats = [...$$('.cat-toggle.on')].map(b => b.dataset.cat);
+    if (!cats.length) { alert('Please select at least one topic!'); return; }
+    const rp = $1('#roundPills .pill.on'), tp = $1('#timePills .pill.on');
     SAVED = {
-        mode:SAVED.mode||'battle',
-        p1Name:$1('#p1Name').value.trim()||'Player 1',
-        p2Name:$1('#p2Name').value.trim()||'Player 2',
-        totalRounds:parseInt(rp?.dataset.val??10),
-        timePerQ:parseInt(tp?.dataset.val??120),
-        selectedCats:cats,
+        mode: SAVED.mode || 'battle',
+        p1Name: $('p1Name').value.trim() || 'Player 1',
+        p2Name: $('p2Name').value.trim() || 'Player 2',
+        totalRounds: parseInt(rp?.dataset.val ?? 10),
+        timePerQ: parseInt(tp?.dataset.val ?? 120),
+        selectedCats: cats,
     };
     launchGame();
 }
 function replayGame() { launchGame(); }
 function launchGame() {
-    G = Object.assign(blankState(),SAVED);
+    G = Object.assign(blankState(), SAVED);
     showScreen('gameScreen');
     updateScoreboard();
     nextQuestion();
 }
 function startPractice(cat) {
-    SAVED={mode:'solo',p1Name:'You',p2Name:'—',totalRounds:QB[cat].length,timePerQ:0,selectedCats:[cat]};
-    G=Object.assign(blankState(),SAVED,{hintPU:99,skipPU:99,timePU:99,freezePU:99});
+    SAVED = { mode:'solo', p1Name:'You', p2Name:'—', totalRounds:QB[cat].length, timePerQ:0, selectedCats:[cat] };
+    G = Object.assign(blankState(), SAVED, { hintPU:99, skipPU:99, timePU:99, freezePU:99 });
     showScreen('gameScreen');
     updateScoreboard();
     nextQuestion();
@@ -1009,59 +1069,60 @@ function startPractice(cat) {
    QUESTION FLOW
 ═══════════════════════════════════════════════════════ */
 function pickQ() {
-    const pool=[];
-    G.selectedCats.forEach(cat=>QB[cat].forEach((q,i)=>{
-        const id=cat+'-'+i;
-        if(!G.usedQ.includes(id))pool.push({...q,_id:id,_cat:cat});
+    const pool = [];
+    G.selectedCats.forEach(cat => QB[cat].forEach((q,i) => {
+        const id = cat + '-' + i;
+        if (!G.usedQ.includes(id)) pool.push({...q, _id:id, _cat:cat});
     }));
-    if(!pool.length){G.usedQ=[];return pickQ();}
-    const q=pool[Math.floor(Math.random()*pool.length)];
+    if (!pool.length) { G.usedQ = []; return pickQ(); }
+    const q = pool[Math.floor(Math.random() * pool.length)];
     G.usedQ.push(q._id);
     return q;
 }
 
 function nextQuestion() {
-    if(G.round>=G.totalRounds){endGame();return;}
-    G.round++; G.answered=false; G.cardFlipped=false; G.frozen=false;
-    G.currentQ=pickQ();
+    if (G.round >= G.totalRounds) { endGame(); return; }
+    G.round++;
+    G.answered = false;
+    G.cardFlipped = false;
+    G.frozen = false;
+    G.currentQ = pickQ();
 
-    // Reset card
+    // Reset card flip
     $('flipCard').classList.remove('flipped');
 
-    // Reset inputs
-    const inp=$('g_ansInput');
-    inp.value=''; inp.className='answer-input';
-    inp.style.borderColor=''; inp.style.boxShadow='';
-    inp.disabled=false;
-    $('g_submitBtn').disabled=false;
+    // Reset input
+    const inp = $('g_ansInput');
+    inp.value = '';
+    inp.className = 'answer-input';
+    inp.style.borderColor = '';
+    inp.style.boxShadow = '';
+    inp.disabled = false;
+    $('g_submitBtn').disabled = false;
 
     // Reset feedback areas
-    $('g_feedback').className='feedback';
-    $('g_hintBox').className='hint-box';
-    $('g_steps').className='steps-box';
-    $('g_correctAns').className='correct-ans-display';
+    $('g_feedback').className    = 'feedback';
+    $('g_hintBox').className     = 'hint-box';
+    $('g_steps').className       = 'steps-box';
+    $('g_correctAns').className  = 'correct-ans-display';
 
-    // ── RENDER QUESTION with proper fraction display ──
-    $('g_qCat').textContent = CAT_LABELS[G.currentQ._cat];
-    $('g_qDisplay').innerHTML = renderQuestion(G.currentQ.q);
-
-    // Fill other UI
-    $('g_catChip').textContent   = CAT_LABELS[G.currentQ._cat];
-    $('g_roundLbl').textContent  = `Round ${G.round} / ${G.totalRounds}`;
-    $('g_hintBox').textContent   = G.currentQ.hint || '';
-    $('g_fmtHint').textContent   = FMT_HINTS[G.currentQ._cat] || '';
-
-    // ── RENDER STEPS with fractions ──
-    $('g_stepsBody').innerHTML = (G.currentQ.steps||[]).map(renderStep).join('');
+    // Render question
+    $('g_qCat').textContent       = CAT_LABELS[G.currentQ._cat];
+    $('g_qDisplay').innerHTML     = renderQuestion(G.currentQ.q);
+    $('g_catChip').textContent    = CAT_LABELS[G.currentQ._cat];
+    $('g_roundLbl').textContent   = `Round ${G.round} / ${G.totalRounds}`;
+    $('g_hintBox').textContent    = G.currentQ.hint || '';
+    $('g_fmtHint').textContent    = FMT_HINTS[G.currentQ._cat] || '';
+    $('g_stepsBody').innerHTML    = (G.currentQ.steps || []).map(renderStep).join('');
 
     // Power-up badges
-    const puSet=(btnId,cntId,val,extra)=>{
-        $(cntId).textContent=val===99?'∞':val;
-        $(btnId).disabled=val<=0||(extra&&G.timePerQ===0);
+    const puSet = (btnId, cntId, val, needsTimer) => {
+        $(cntId).textContent   = val === 99 ? '∞' : val;
+        $(btnId).disabled      = val <= 0 || (needsTimer && G.timePerQ === 0);
     };
-    puSet('puHint','puHintN',G.hintPU,false);
-    puSet('puSkip','puSkipN',G.skipPU,false);
-    puSet('puTime','puTimeN',G.timePU,true);
+    puSet('puHint',  'puHintN',  G.hintPU,  false);
+    puSet('puSkip',  'puSkipN',  G.skipPU,  false);
+    puSet('puTime',  'puTimeN',  G.timePU,  true);
     puSet('puFreeze','puFreezeN',G.freezePU,true);
 
     updateScoreboard();
@@ -1073,247 +1134,489 @@ function nextQuestion() {
    FLIP CARD
 ═══════════════════════════════════════════════════════ */
 function flipCard() {
-    if(G.answered)return;
+    if (G.answered) return;
     $('flipCard').classList.toggle('flipped');
-    G.cardFlipped=$('flipCard').classList.contains('flipped');
+    G.cardFlipped = $('flipCard').classList.contains('flipped');
 }
 
 /* ═══════════════════════════════════════════════════════
    TIMER
 ═══════════════════════════════════════════════════════ */
 function getMultiplier() {
-    if(G.timePerQ===0)return 1;
-    const p=G.timeLeft/G.timePerQ;
-    return p>0.75?3:p>0.5?2:p>0.25?1.5:1;
+    if (G.timePerQ === 0) return 1;
+    const p = G.timeLeft / G.timePerQ;
+    return p > 0.75 ? 3 : p > 0.5 ? 2 : p > 0.25 ? 1.5 : 1;
 }
 function updateBonusUI() {
-    const m=getMultiplier();
-    [{m:3,id:'bz0'},{m:2,id:'bz1'},{m:1.5,id:'bz2'},{m:1,id:'bz3'}].forEach(z=>{
-        $(z.id).classList.toggle('active',m===z.m);
+    const m = getMultiplier();
+    [{m:3,id:'bz0'},{m:2,id:'bz1'},{m:1.5,id:'bz2'},{m:1,id:'bz3'}].forEach(z => {
+        $(z.id).classList.toggle('active', m === z.m);
     });
-    const base=G.currentQ?G.currentQ.pts:0;
-    $('g_ptsLbl').textContent=`+${Math.round(base*m)} pts (×${m})`;
+    const base = G.currentQ ? G.currentQ.pts : 0;
+    $('g_ptsLbl').textContent = `+${Math.round(base * m)} pts (×${m})`;
 }
 function startTimer() {
     clearInterval(G.timer);
-    if(G.timePerQ===0){$('g_timerTxt').textContent='⏱ ∞';$('g_timerBar').style.width='100%';updateBonusUI();return;}
-    G.timeLeft=G.timePerQ; renderTimer();
-    G.timer=setInterval(()=>{
-        if(G.frozen)return;
-        G.timeLeft=Math.max(0,G.timeLeft-1);
+    if (G.timePerQ === 0) {
+        $('g_timerTxt').textContent = '⏱ ∞';
+        $('g_timerBar').style.width = '100%';
+        updateBonusUI();
+        return;
+    }
+    G.timeLeft = G.timePerQ;
+    renderTimer();
+    G.timer = setInterval(() => {
+        if (G.frozen) return;
+        G.timeLeft = Math.max(0, G.timeLeft - 1);
         renderTimer();
-        if(G.timeLeft<=0){clearInterval(G.timer);if(!G.answered)timeOut();}
-    },1000);
+        if (G.timeLeft <= 0) { clearInterval(G.timer); if (!G.answered) timeOut(); }
+    }, 1000);
 }
 function renderTimer() {
-    const pct=G.timePerQ>0?(G.timeLeft/G.timePerQ)*100:100;
-    $('g_timerBar').style.width=pct+'%';
-    $('g_timerTxt').textContent=`⏱ ${G.timeLeft}s`;
+    const pct = G.timePerQ > 0 ? (G.timeLeft / G.timePerQ) * 100 : 100;
+    $('g_timerBar').style.width  = pct + '%';
+    $('g_timerTxt').textContent  = `⏱ ${G.timeLeft}s`;
     updateBonusUI();
 }
 function timeOut() {
-    if(G.answered)return;
-    G.answered=true;
-    showFeedback('timeout','⏰ Time\'s up!');
+    if (G.answered) return;
+    G.answered = true;
+    showFeedback('timeout', "⏰ Time's up!");
     showCorrectAnswer();
     handleWrong();
-    $('g_ansInput').disabled=true; $('g_submitBtn').disabled=true;
-    $('g_steps').className='steps-box show';
-    setTimeout(()=>{switchPlayer();nextQuestion();},4000);
+    $('g_ansInput').disabled    = true;
+    $('g_submitBtn').disabled   = true;
+    $('g_steps').className      = 'steps-box show';
+    setTimeout(() => { switchPlayer(); nextQuestion(); }, 4000);
 }
 
 /* ═══════════════════════════════════════════════════════
-   SHOW CORRECT ANSWER (rendered with fractions)
+   SHOW CORRECT ANSWER
 ═══════════════════════════════════════════════════════ */
 function showCorrectAnswer() {
     const displayAns = G.currentQ.a.split('|')[0];
     $('g_correctAnsMath').innerHTML = renderMath(displayAns);
-    $('g_correctAns').className = 'correct-ans-display show';
+    $('g_correctAns').className     = 'correct-ans-display show';
 }
 
 /* ═══════════════════════════════════════════════════════
    SUBMIT & CHECK
 ═══════════════════════════════════════════════════════ */
 function submitAnswer() {
-    if(G.answered)return;
-    if(!G.cardFlipped){flipCard();return;}
-    const raw=$('g_ansInput').value.trim();
-    if(!raw){$('g_ansInput').focus();return;}
+    if (G.answered) return;
+    if (!G.cardFlipped) { flipCard(); return; }
+    const raw = $('g_ansInput').value.trim();
+    if (!raw) { $('g_ansInput').focus(); return; }
 
-    G.answered=true;
+    G.answered = true;
     clearInterval(G.timer);
-    $('g_submitBtn').disabled=true;
-    $('g_ansInput').disabled=true;
+    $('g_submitBtn').disabled = true;
+    $('g_ansInput').disabled  = true;
     $('g_ansInput').classList.remove('live-ok');
-    $('g_ansInput').style.borderColor='';
-    $('g_ansInput').style.boxShadow='';
+    $('g_ansInput').style.borderColor = '';
+    $('g_ansInput').style.boxShadow   = '';
 
-    const ok=checkAnswer(raw,G.currentQ.a);
-    if(ok){
+    const ok = checkAnswer(raw, G.currentQ.a);
+    if (ok) {
         $('g_ansInput').classList.add('ans-correct');
-        const m=getMultiplier(), earned=Math.round(G.currentQ.pts*m);
-        showFeedback('correct',`✅ Correct!  +${earned} pts${m>1?'  ⚡ ×'+m+' Speed Bonus!':''}`);
-        handleCorrect(earned,m);
-        if(m>=2)showBonusToast(`+${earned} pts\n⚡ ×${m} BONUS!`);
-        confetti(m>=3?40:m>=2?26:18);
-        setTimeout(()=>{switchPlayer();nextQuestion();},2400);
+        const m = getMultiplier(), earned = Math.round(G.currentQ.pts * m);
+        showFeedback('correct', `✅ Correct!  +${earned} pts${m > 1 ? '  ⚡ ×' + m + ' Speed Bonus!' : ''}`);
+        handleCorrect(earned, m);
+        if (m >= 2) showBonusToast(`+${earned} pts\n⚡ ×${m} BONUS!`);
+        confetti(m >= 3 ? 40 : m >= 2 ? 26 : 18);
+        setTimeout(() => { switchPlayer(); nextQuestion(); }, 2400);
     } else {
         $('g_ansInput').classList.add('ans-wrong');
-        showFeedback('wrong','❌ Incorrect.');
+        showFeedback('wrong', '❌ Incorrect.');
         showCorrectAnswer();
         handleWrong();
-        $('g_steps').className='steps-box show';
-        setTimeout(()=>{switchPlayer();nextQuestion();},4200);
+        $('g_steps').className = 'steps-box show';
+        setTimeout(() => { switchPlayer(); nextQuestion(); }, 4200);
     }
 }
 
 function liveCheck() {
-    if(G.answered)return;
-    const raw=$('g_ansInput').value.trim();
+    if (G.answered) return;
+    const raw = $('g_ansInput').value.trim();
     $('g_ansInput').classList.remove('live-ok');
-    $('g_ansInput').style.borderColor=''; $('g_ansInput').style.boxShadow='';
-    if(raw&&G.currentQ&&checkAnswer(raw,G.currentQ.a)){
+    $('g_ansInput').style.borderColor = '';
+    $('g_ansInput').style.boxShadow   = '';
+    if (raw && G.currentQ && checkAnswer(raw, G.currentQ.a)) {
         $('g_ansInput').classList.add('live-ok');
     }
 }
-function handleKey(e){if(e.key==='Enter')submitAnswer();}
-function skipQuestion(){
-    if(G.answered)return;
-    G.answered=true; clearInterval(G.timer); G.curStreak=0;
-    showFeedback('wrong','⏭️ Skipped!');
+function handleKey(e) { if (e.key === 'Enter') submitAnswer(); }
+
+function skipQuestion() {
+    if (G.answered) return;
+    G.answered = true;
+    clearInterval(G.timer);
+    G.curStreak = 0;
+    showFeedback('wrong', '⏭️ Skipped!');
     showCorrectAnswer();
-    $('g_steps').className='steps-box show';
-    $('g_submitBtn').disabled=true;
+    $('g_steps').className    = 'steps-box show';
+    $('g_submitBtn').disabled = true;
     updateStats();
-    setTimeout(()=>{switchPlayer();nextQuestion();},4000);
+    setTimeout(() => { switchPlayer(); nextQuestion(); }, 4000);
 }
 
 /* ═══════════════════════════════════════════════════════
-   SCORE
+   SCORING
 ═══════════════════════════════════════════════════════ */
-function handleCorrect(earned,m){
-    G.totalCorrect++; G.curStreak++;
-    if(G.curStreak>G.maxStreak)G.maxStreak=G.curStreak;
-    if(G.currentPlayer===1){G.p1Score+=earned;G.p1Streak++;}
-    else{G.p2Score+=earned;G.p2Streak++;}
-    updateScoreboard();updateStats();
+function handleCorrect(earned, m) {
+    G.totalCorrect++;
+    G.curStreak++;
+    if (G.curStreak > G.maxStreak) G.maxStreak = G.curStreak;
+    if (G.currentPlayer === 1) { G.p1Score += earned; G.p1Streak++; }
+    else                       { G.p2Score += earned; G.p2Streak++; }
+    updateScoreboard();
+    updateStats();
 }
-function handleWrong(){
-    G.totalWrong++;G.curStreak=0;
-    if(G.currentPlayer===1)G.p1Streak=0; else G.p2Streak=0;
-    updateScoreboard();updateStats();
+function handleWrong() {
+    G.totalWrong++;
+    G.curStreak = 0;
+    if (G.currentPlayer === 1) G.p1Streak = 0; else G.p2Streak = 0;
+    updateScoreboard();
+    updateStats();
 }
 
 /* ═══════════════════════════════════════════════════════
    POWER-UPS
 ═══════════════════════════════════════════════════════ */
-function useHintPU(){
-    if(G.hintPU===0)return;
-    if(G.hintPU!==99){G.hintPU--;$('puHintN').textContent=G.hintPU;}
-    $('puHint').disabled=G.hintPU<=0;
-    $('g_hintBox').className='hint-box show';
+function useHintPU() {
+    if (G.hintPU === 0) return;
+    if (G.hintPU !== 99) { G.hintPU--; $('puHintN').textContent = G.hintPU; }
+    $('puHint').disabled = G.hintPU <= 0;
+    $('g_hintBox').className = 'hint-box show';
 }
-function useSkipPU(){
-    if(G.skipPU===0)return;
-    if(G.skipPU!==99){G.skipPU--;$('puSkipN').textContent=G.skipPU;}
-    $('puSkip').disabled=G.skipPU<=0;
+function useSkipPU() {
+    if (G.skipPU === 0) return;
+    if (G.skipPU !== 99) { G.skipPU--; $('puSkipN').textContent = G.skipPU; }
+    $('puSkip').disabled = G.skipPU <= 0;
     skipQuestion();
 }
-function useTimePU(){
-    if(G.timePU===0||G.timePerQ===0)return;
-    if(G.timePU!==99){G.timePU--;$('puTimeN').textContent=G.timePU;}
-    $('puTime').disabled=G.timePU<=0;
-    G.timeLeft=Math.min(G.timeLeft+30,G.timePerQ);
-    renderTimer(); showBonusToast('+30s ⏰');
+function useTimePU() {
+    if (G.timePU === 0 || G.timePerQ === 0) return;
+    if (G.timePU !== 99) { G.timePU--; $('puTimeN').textContent = G.timePU; }
+    $('puTime').disabled = G.timePU <= 0;
+    G.timeLeft = Math.min(G.timeLeft + 30, G.timePerQ);
+    renderTimer();
+    showBonusToast('+30s ⏰');
 }
-function useFreezePU(){
-    if(G.freezePU===0||G.timePerQ===0||G.frozen)return;
-    if(G.freezePU!==99){G.freezePU--;$('puFreezeN').textContent=G.freezePU;}
-    $('puFreeze').disabled=G.freezePU<=0;
-    G.frozen=true; showBonusToast('❄️ Timer Frozen!\n10 seconds');
-    $('g_timerBar').style.background='#a8edea';
-    setTimeout(()=>{G.frozen=false;$('g_timerBar').style.background='';},10000);
+function useFreezePU() {
+    if (G.freezePU === 0 || G.timePerQ === 0 || G.frozen) return;
+    if (G.freezePU !== 99) { G.freezePU--; $('puFreezeN').textContent = G.freezePU; }
+    $('puFreeze').disabled = G.freezePU <= 0;
+    G.frozen = true;
+    showBonusToast('❄️ Timer Frozen!\n10 seconds');
+    $('g_timerBar').style.background = '#a8edea';
+    setTimeout(() => {
+        G.frozen = false;
+        $('g_timerBar').style.background = '';
+    }, 10000);
 }
 
 /* ═══════════════════════════════════════════════════════
    SCOREBOARD & STATS
 ═══════════════════════════════════════════════════════ */
-function updateScoreboard(){
-    $('g_p1name').textContent=G.p1Name;
-    $('g_p2name').textContent=G.mode==='battle'?G.p2Name:'—';
-    $('g_p1score').textContent=G.p1Score;
-    $('g_p2score').textContent=G.mode==='battle'?G.p2Score:'—';
-    $('g_p1streak').textContent=`🔥 ${G.p1Streak}`;
-    $('g_p2streak').textContent=G.mode==='battle'?`🔥 ${G.p2Streak}`:'';
-    const ti=$('g_turn');
-    if(G.mode==='battle'){
-        ti.textContent=(G.currentPlayer===1?G.p1Name:G.p2Name)+"'s Turn";
-        ti.className='turn-pill '+(G.currentPlayer===1?'turn-p1':'turn-p2');
-    } else {ti.textContent='Your Turn';ti.className='turn-pill turn-p1';}
+function updateScoreboard() {
+    $('g_p1name').textContent  = G.p1Name;
+    $('g_p2name').textContent  = G.mode === 'battle' ? G.p2Name : '—';
+    $('g_p1score').textContent = G.p1Score;
+    $('g_p2score').textContent = G.mode === 'battle' ? G.p2Score : '—';
+    $('g_p1streak').textContent= `🔥 ${G.p1Streak}`;
+    $('g_p2streak').textContent= G.mode === 'battle' ? `🔥 ${G.p2Streak}` : '';
+    const ti = $('g_turn');
+    if (G.mode === 'battle') {
+        ti.textContent = (G.currentPlayer === 1 ? G.p1Name : G.p2Name) + "'s Turn";
+        ti.className   = 'turn-pill ' + (G.currentPlayer === 1 ? 'turn-p1' : 'turn-p2');
+    } else {
+        ti.textContent = 'Your Turn';
+        ti.className   = 'turn-pill turn-p1';
+    }
 }
-function switchPlayer(){if(G.mode==='battle')G.currentPlayer=G.currentPlayer===1?2:1;}
-function updateStats(){
-    const tot=G.totalCorrect+G.totalWrong;
-    $('st_correct').textContent=G.totalCorrect;
-    $('st_wrong').textContent=G.totalWrong;
-    $('st_streak').textContent=G.maxStreak;
-    $('st_acc').textContent=tot>0?Math.round(G.totalCorrect/tot*100)+'%':'—';
+function switchPlayer() {
+    if (G.mode === 'battle') G.currentPlayer = G.currentPlayer === 1 ? 2 : 1;
+}
+function updateStats() {
+    const tot = G.totalCorrect + G.totalWrong;
+    $('st_correct').textContent = G.totalCorrect;
+    $('st_wrong').textContent   = G.totalWrong;
+    $('st_streak').textContent  = G.maxStreak;
+    $('st_acc').textContent     = tot > 0 ? Math.round(G.totalCorrect / tot * 100) + '%' : '—';
 }
 
 /* ═══════════════════════════════════════════════════════
    FEEDBACK
 ═══════════════════════════════════════════════════════ */
-function showFeedback(type,msg){
-    const el=$('g_feedback');
-    el.textContent=msg;
-    const m={correct:'fb-correct',wrong:'fb-wrong',timeout:'fb-timeout'};
-    el.className=`feedback show ${m[type]||''}`;
+function showFeedback(type, msg) {
+    const el  = $('g_feedback');
+    el.textContent = msg;
+    const map = { correct:'fb-correct', wrong:'fb-wrong', timeout:'fb-timeout' };
+    el.className   = `feedback show ${map[type] || ''}`;
 }
 
 /* ═══════════════════════════════════════════════════════
-   END GAME
+   END GAME  →  show winner + init card game
 ═══════════════════════════════════════════════════════ */
-function endGame(){
+function endGame() {
     clearInterval(G.timer);
-    const tot=G.totalCorrect+G.totalWrong, acc=tot>0?Math.round(G.totalCorrect/tot*100):0;
-    $('w_p1name').textContent=G.p1Name; $('w_p2name').textContent=G.mode==='battle'?G.p2Name:'—';
-    $('w_p1score').textContent=G.p1Score; $('w_p2score').textContent=G.mode==='battle'?G.p2Score:'—';
-    let winnerName,trophy;
-    if(G.mode==='battle'){
-        if(G.p1Score>G.p2Score){winnerName=G.p1Name;trophy='🏆';}
-        else if(G.p2Score>G.p1Score){winnerName=G.p2Name;trophy='🏆';}
-        else{winnerName="It's a Draw!";trophy='🤝';}
-    } else {winnerName=G.p1Name;trophy=acc>=80?'🏆':acc>=60?'🥈':'🥉';}
-    $('w_trophy').textContent=trophy; $('w_name').textContent=winnerName;
-    $('w_stats').innerHTML=`✅ Correct: <strong>${G.totalCorrect}</strong> &nbsp;|&nbsp; ❌ Wrong: <strong>${G.totalWrong}</strong> &nbsp;|&nbsp; 🎯 Accuracy: <strong>${acc}%</strong><br>🔥 Best Streak: <strong>${G.maxStreak}</strong> &nbsp;|&nbsp; 📝 Rounds: <strong>${G.totalRounds}</strong>`;
-    showScreen('winnerScreen'); confetti(70);
+    const tot = G.totalCorrect + G.totalWrong;
+    const acc = tot > 0 ? Math.round(G.totalCorrect / tot * 100) : 0;
+
+    $('w_p1name').textContent  = G.p1Name;
+    $('w_p2name').textContent  = G.mode === 'battle' ? G.p2Name : '—';
+    $('w_p1score').textContent = G.p1Score;
+    $('w_p2score').textContent = G.mode === 'battle' ? G.p2Score : '—';
+
+    let winnerName, trophy;
+    if (G.mode === 'battle') {
+        if      (G.p1Score > G.p2Score) { winnerName = G.p1Name; trophy = '🏆'; }
+        else if (G.p2Score > G.p1Score) { winnerName = G.p2Name; trophy = '🏆'; }
+        else                            { winnerName = "It's a Draw!"; trophy = '🤝'; }
+    } else {
+        winnerName = G.p1Name;
+        trophy = acc >= 80 ? '🏆' : acc >= 60 ? '🥈' : '🥉';
+    }
+    $('w_trophy').textContent = trophy;
+    $('w_name').textContent   = winnerName;
+    $('w_stats').innerHTML    =
+        `✅ Correct: <strong>${G.totalCorrect}</strong> &nbsp;|&nbsp; ` +
+        `❌ Wrong: <strong>${G.totalWrong}</strong> &nbsp;|&nbsp; ` +
+        `🎯 Accuracy: <strong>${acc}%</strong><br>` +
+        `🔥 Best Streak: <strong>${G.maxStreak}</strong> &nbsp;|&nbsp; ` +
+        `📝 Rounds: <strong>${G.totalRounds}</strong>`;
+
+    // ── Convert points → tokens (10 pts = 1 token, min 5 tokens guaranteed) ──
+    const totalPts  = G.mode === 'battle'
+        ? Math.max(G.p1Score, G.p2Score)   // winner's score
+        : G.p1Score;
+    const tokens    = Math.max(5, Math.floor(totalPts / 10));
+    cgInitGame(tokens, totalPts);
+
+    showScreen('winnerScreen');
+    confetti(70);
+}
+
+/* ═══════════════════════════════════════════════════════
+   CARD FLIP BONUS GAME
+═══════════════════════════════════════════════════════ */
+
+/* Prize table — each card in a shuffled deck of 6 */
+const CG_PRIZES = [
+    { key:'jackpot', emoji:'🌟', label:'JACKPOT!',  cls:'prize-jackpot', mult:5,   prob:1  },
+    { key:'double',  emoji:'×2', label:'DOUBLE!',   cls:'prize-double',  mult:2,   prob:1  },
+    { key:'big',     emoji:'💎', label:'+3 tokens', cls:'prize-big',     flat:3,   prob:2  },
+    { key:'medium',  emoji:'⭐', label:'+1 token',  cls:'prize-medium',  flat:1,   prob:1  },
+    { key:'small',   emoji:'➕', label:'Push (0)',  cls:'prize-small',   flat:0,   prob:1  },
+    { key:'lose',    emoji:'💀', label:'BUST! −bet',cls:'prize-lose',    mult:-1,  prob:1  },
+];
+
+let CG = {};   // card-game state
+
+function cgInitGame(tokens, ptsEquiv) {
+    CG = {
+        tokens,
+        ptsEquiv,
+        bet: 1,
+        history: [],
+        roundActive: false,
+    };
+    // Bet pills
+    $$('#cgBetPills .cg-bet-pill').forEach(p =>
+        p.addEventListener('click', () => {
+            if (CG.roundActive) return;
+            $$('#cgBetPills .cg-bet-pill').forEach(x => x.classList.remove('on'));
+            p.classList.add('on');
+            CG.bet = parseInt(p.dataset.bet);
+        })
+    );
+    cgUpdateDisplay();
+    cgDealNewRound();
+}
+
+function cgUpdateDisplay() {
+    $('cg_tokens').textContent = CG.tokens;
+    $('cg_pts').textContent    = CG.tokens * 10;
+    // Disable bet pills for amounts > tokens
+    $$('#cgBetPills .cg-bet-pill').forEach(p => {
+        const v = parseInt(p.dataset.bet);
+        p.style.opacity = v > CG.tokens ? '0.3' : '1';
+        p.style.pointerEvents = v > CG.tokens ? 'none' : '';
+        if (v > CG.tokens && p.classList.contains('on')) {
+            p.classList.remove('on');
+            // auto-select max affordable
+            const max = [...$$('#cgBetPills .cg-bet-pill')]
+                .filter(x => parseInt(x.dataset.bet) <= CG.tokens)
+                .pop();
+            if (max) { max.classList.add('on'); CG.bet = parseInt(max.dataset.bet); }
+        }
+    });
+}
+
+/* Build a shuffled deck of 6 prize outcomes (weighted) */
+function cgBuildDeck() {
+    const deck = [];
+    CG_PRIZES.forEach(p => { for (let i = 0; i < p.prob; i++) deck.push(p); });
+    // Shuffle
+    for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+    return deck.slice(0, 6);  // exactly 6 cards
+}
+
+function cgDealNewRound() {
+    if (CG.tokens <= 0) {
+        $('cgResultBanner').innerHTML = '😔 No tokens left! Play again to earn more.';
+        $('cgResultBanner').classList.add('show');
+        $('cgDealBtn').disabled = true;
+        return;
+    }
+    CG.roundActive = false;
+    CG.deck = cgBuildDeck();
+    $('cgResultBanner').classList.remove('show');
+    cgRenderCards();
+    cgUpdateDisplay();
+    $('cgDealBtn').disabled = false;
+}
+
+function cgRenderCards() {
+    const grid = $('cgCardsGrid');
+    grid.innerHTML = '';
+    CG.deck.forEach((prize, idx) => {
+        const card = document.createElement('div');
+        card.className = 'cg-card';
+        card.dataset.idx = idx;
+        card.innerHTML = `
+            <div class="cg-card-inner">
+                <div class="cg-card-face cg-card-back"></div>
+                <div class="cg-card-face cg-card-front ${prize.cls}">
+                    <span>${prize.emoji}</span>
+                    <div class="cg-card-label">${prize.label}</div>
+                </div>
+            </div>`;
+        card.addEventListener('click', () => cgFlipCard(card, prize, idx));
+        grid.appendChild(card);
+    });
+}
+
+function cgFlipCard(cardEl, prize, idx) {
+    // Only one flip per round
+    if (CG.roundActive) return;
+    if (cardEl.classList.contains('revealed')) return;
+    if (CG.tokens < CG.bet) {
+        showBonusToast('Not enough tokens!');
+        return;
+    }
+
+    CG.roundActive = true;
+    CG.tokens -= CG.bet;   // deduct bet immediately
+
+    // Flip this card
+    cardEl.classList.add('revealed');
+
+    // After flip animation, reveal all others & compute result
+    setTimeout(() => {
+        // Reveal all remaining cards
+        $$('#cgCardsGrid .cg-card:not(.revealed)').forEach(c => c.classList.add('revealed'));
+
+        // Compute winnings
+        let delta = 0;
+        let resultMsg = '';
+        let chipType = 'chip-push';
+
+        if (prize.mult !== undefined) {
+            if (prize.mult === -1) {
+                // Bust — lose bet (already deducted)
+                delta    = 0;
+                resultMsg = `💀 BUST! Lost ${CG.bet} token${CG.bet > 1 ? 's' : ''}.`;
+                chipType  = 'chip-lose';
+            } else {
+                // Multiplier win: get back bet × mult
+                delta    = CG.bet * prize.mult;
+                CG.tokens += delta;
+                resultMsg = `${prize.emoji} ${prize.label}  +${delta} token${delta !== 1 ? 's' : ''}!`;
+                chipType  = 'chip-win';
+                confetti(prize.mult >= 5 ? 60 : 30);
+            }
+        } else {
+            // Flat gain/push
+            delta    = prize.flat;
+            CG.tokens += delta;
+            if (delta > 0) {
+                resultMsg = `${prize.emoji} ${prize.label}  +${delta} token${delta !== 1 ? 's' : ''}!`;
+                chipType  = 'chip-win';
+                confetti(20);
+            } else {
+                // Push: refund bet
+                CG.tokens += CG.bet;
+                resultMsg = `${prize.emoji} Push! Bet returned.`;
+                chipType  = 'chip-push';
+            }
+        }
+
+        // Update display
+        cgUpdateDisplay();
+
+        // Result banner
+        const banner = $('cgResultBanner');
+        banner.innerHTML = resultMsg;
+        banner.style.color = chipType === 'chip-win' ? 'var(--accent)' : chipType === 'chip-lose' ? 'var(--danger)' : 'var(--gold)';
+        banner.classList.add('show');
+
+        // History
+        CG.history.unshift({ label: resultMsg.split('  ')[0] || resultMsg.slice(0,20), type: chipType });
+        cgRenderHistory();
+
+        // Bonus toast
+        showBonusToast(resultMsg);
+
+        // Check tokens
+        if (CG.tokens <= 0) {
+            setTimeout(() => {
+                $('cgResultBanner').innerHTML = '😔 Out of tokens! Well played 🎉';
+                $('cgDealBtn').disabled = true;
+            }, 1500);
+        }
+    }, 650); // after flip animation
+}
+
+function cgRenderHistory() {
+    const hist = $('cgHistory');
+    hist.innerHTML = CG.history.slice(0, 12).map(h =>
+        `<span class="cg-hist-chip ${h.type}">${h.label}</span>`
+    ).join('');
 }
 
 /* ═══════════════════════════════════════════════════════
    BONUS TOAST & CONFETTI
 ═══════════════════════════════════════════════════════ */
-function showBonusToast(msg){
-    const t=document.getElementById('bonusToast');
-    t.textContent=msg; t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),1800);
+function showBonusToast(msg) {
+    const t = $('bonusToast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1800);
 }
-function confetti(n=20){
-    const cols=['#f6d365','#f093fb','#43e97b','#38f9d7','#f5576c','#667eea','#fda085'];
-    for(let i=0;i<n;i++){
-        const p=document.createElement('div');
-        p.className='confetti-piece';
-        const dx=(Math.random()-0.5)*160;
-        p.style.cssText=`left:${Math.random()*100}vw;--dx:${dx}px;background:${cols[Math.floor(Math.random()*cols.length)]};animation-duration:${(Math.random()*2+2).toFixed(1)}s;animation-delay:${(Math.random()*0.7).toFixed(2)}s;width:${Math.round(Math.random()*8+5)}px;height:${Math.round(Math.random()*8+5)}px;border-radius:${Math.random()>.5?'50%':'3px'};`;
+function confetti(n = 20) {
+    const cols = ['#f6d365','#f093fb','#43e97b','#38f9d7','#f5576c','#667eea','#fda085'];
+    for (let i = 0; i < n; i++) {
+        const p = document.createElement('div');
+        p.className = 'confetti-piece';
+        const dx = (Math.random() - 0.5) * 160;
+        p.style.cssText =
+            `left:${Math.random()*100}vw;--dx:${dx}px;` +
+            `background:${cols[Math.floor(Math.random()*cols.length)]};` +
+            `animation-duration:${(Math.random()*2+2).toFixed(1)}s;` +
+            `animation-delay:${(Math.random()*0.7).toFixed(2)}s;` +
+            `width:${Math.round(Math.random()*8+5)}px;` +
+            `height:${Math.round(Math.random()*8+5)}px;` +
+            `border-radius:${Math.random()>.5?'50%':'3px'};`;
         document.body.appendChild(p);
-        p.addEventListener('animationend',()=>p.remove());
+        p.addEventListener('animationend', () => p.remove());
     }
 }
-function closePopup(){document.getElementById('popupOverlay').classList.remove('show');}
-
-/* helpers */
-function $(id){return document.getElementById(id);}
-function $1(sel){return document.querySelector(sel);}
-function $all(sel){return document.querySelectorAll(sel);}
+function closePopup() { $('popupOverlay').classList.remove('show'); }
 </script>
 </body>
 </html>
