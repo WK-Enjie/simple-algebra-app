@@ -727,76 +727,143 @@ const $1 = sel => document.querySelector(sel);
 const $$ = sel => document.querySelectorAll(sel);
 
 /* ═══════════════════════════════════════════════════════
-   MATH RENDERER
+   MATH RENDERER — fractions first, superscripts last
+   No double-processing of already-rendered HTML
 ═══════════════════════════════════════════════════════ */
+
+/** Pass 1 helper — convert superscripts on plain text only */
+function applySuperscripts(s) {
+    return s
+        .replace(/\^(\d+)/g, '<sup>$1</sup>')
+        .replace(/²/g, '<sup>2</sup>')
+        .replace(/³/g, '<sup>3</sup>');
+}
+
+/**
+ * Main renderer — two-pass:
+ *   Pass 1 : processFractions() → array of {type:'html'|'text', val}
+ *   Pass 2 : applySuperscripts() on 'text' tokens only
+ * HTML tokens (fraction spans) are NEVER re-processed.
+ */
 function renderMath(text) {
     if (!text) return '';
-    let s = String(text);
+    const tokens = processFractions(String(text));
+    return tokens.map(tok =>
+        tok.type === 'html' ? tok.val : applySuperscripts(tok.val)
+    ).join('');
+}
 
-    // Superscripts
-    s = s.replace(/\^(\d+)/g, '<sup>$1</sup>')
-         .replace(/²/g, '<sup>2</sup>')
-         .replace(/³/g, '<sup>3</sup>');
+/**
+ * Scan string for a/b patterns and return mixed token array.
+ * Numerator/denominator are recursively rendered via renderMath
+ * but outer parentheses are stripped before recursion so they
+ * never appear as literal text inside the fraction display.
+ */
+function processFractions(s) {
+    const result = [];
+    let i = 0;
 
-    // Fractions — left-to-right scan
-    let result = '', i = 0;
     while (i < s.length) {
         const slashIdx = s.indexOf('/', i);
-        if (slashIdx === -1) { result += s.slice(i); break; }
+        if (slashIdx === -1) {
+            if (i < s.length) result.push({ type:'text', val: s.slice(i) });
+            break;
+        }
 
-        // Find numerator
+        /* ── Numerator (left of '/') ── */
         let numStart = slashIdx - 1;
-        while (numStart >= 0 && s[numStart] === ' ') numStart--;
+        while (numStart >= i && s[numStart] === ' ') numStart--;
 
-        let numIsParen = false;
-        if (numStart >= 0 && s[numStart] === ')') {
+        let numText  = null;
+        let numBegin = numStart;
+
+        if (numStart >= i && s[numStart] === ')') {
+            // Parenthesised numerator
             let depth = 0, openIdx = -1;
-            for (let j = numStart; j >= 0; j--) {
+            for (let j = numStart; j >= i; j--) {
                 if (s[j] === ')') depth++;
                 else if (s[j] === '(') { if (--depth === 0) { openIdx = j; break; } }
             }
-            if (openIdx !== -1) { numStart = openIdx; numIsParen = true; }
-        } else {
-            while (numStart >= 0 && /[a-zA-Z0-9+\-*.<>= ]/.test(s[numStart])) numStart--;
-            numStart++;
+            if (openIdx !== -1) {
+                numBegin = openIdx;
+                numText  = s.slice(openIdx + 1, numStart).trim(); // strip parens
+            }
         }
-        const numText = s.slice(numStart, slashIdx).trim();
 
-        // Find denominator
+        if (numText === null) {
+            // Plain token — walk left
+            let j = numStart;
+            while (j >= i && /[a-zA-Z0-9+\-.²³]/.test(s[j])) j--;
+            numBegin = j + 1;
+            numText  = s.slice(numBegin, slashIdx).trim();
+        }
+
+        if (!numText) {
+            // No valid numerator — treat slash as literal
+            result.push({ type:'text', val: s.slice(i, slashIdx + 1) });
+            i = slashIdx + 1;
+            continue;
+        }
+
+        /* ── Denominator (right of '/') ── */
         let denStart = slashIdx + 1;
         while (denStart < s.length && s[denStart] === ' ') denStart++;
-        let denEnd = denStart, denIsParen = false;
+
+        let denEnd  = denStart;
+        let denText = null;
+
         if (denStart < s.length && s[denStart] === '(') {
             let depth = 0, closeIdx = -1;
             for (let j = denStart; j < s.length; j++) {
                 if (s[j] === '(') depth++;
                 else if (s[j] === ')') { if (--depth === 0) { closeIdx = j; break; } }
             }
-            if (closeIdx !== -1) { denEnd = closeIdx + 1; denIsParen = true; }
+            if (closeIdx !== -1) {
+                denEnd  = closeIdx + 1;
+                denText = s.slice(denStart + 1, closeIdx).trim(); // strip parens
+            }
         }
-        if (!denIsParen) {
-            let j = denStart;
-            while (j < s.length && /[a-zA-Z0-9+\-*.<>= ]/.test(s[j])) j++;
-            denEnd = j;
-        }
-        const denText = s.slice(denStart, denEnd).trim();
 
-        if (numText && denText) {
-            result += s.slice(i, numStart);
-            result += `<span class="mfrac"><span class="mnum">${renderMath(numText)}</span><span class="mden">${renderMath(denText)}</span></span>`;
-            i = denEnd;
-        } else {
-            result += s.slice(i, slashIdx + 1);
-            i = slashIdx + 1;
+        if (denText === null) {
+            // Plain denominator token
+            let j = denStart;
+            while (j < s.length && /[a-zA-Z0-9+\-.²³]/.test(s[j])) j++;
+            denEnd  = j;
+            denText = s.slice(denStart, denEnd).trim();
         }
+
+        if (!denText) {
+            // No valid denominator — treat slash as literal
+            result.push({ type:'text', val: s.slice(i, slashIdx + 1) });
+            i = slashIdx + 1;
+            continue;
+        }
+
+        /* ── Emit: plain text before numerator, then fraction span ── */
+        if (numBegin > i) {
+            result.push({ type:'text', val: s.slice(i, numBegin) });
+        }
+
+        // Recurse — num & den are plain text at this point (parens stripped)
+        const numHTML = renderMath(numText);
+        const denHTML = renderMath(denText);
+        result.push({
+            type: 'html',
+            val:  `<span class="mfrac"><span class="mnum">${numHTML}</span><span class="mden">${denHTML}</span></span>`
+        });
+
+        i = denEnd;
     }
+
     return result;
 }
 
+/** Simple HTML escaping — plain text only */
 function escapeHTML(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
+/** Render full question: instruction line + math expression line */
 function renderQuestion(qText) {
     const lines = String(qText).split('\n');
     const instruction = lines[0] || '';
@@ -807,6 +874,7 @@ function renderQuestion(qText) {
     return html;
 }
 
+/** Render a solution step */
 function renderStep(stepText) {
     return `<div class="step-math">${renderMath(stepText)}</div>`;
 }
